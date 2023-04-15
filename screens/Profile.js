@@ -1,6 +1,8 @@
 import React, {useState} from 'react';
 import {Alert, Modal, StyleSheet, Pressable, Text, View, TouchableOpacity, TextInput, ScrollView, Image} from 'react-native';
 import { launchImageLibrary } from 'react-native-image-picker';
+import { Icon } from 'react-native-elements';
+import { Stack, IconButton } from "@react-native-material/core";
 
 function Profile({navigation,route}) {
 
@@ -176,7 +178,7 @@ const styles = StyleSheet.create({
   addButton:{
     backgroundColor: "rgba(255, 222, 144, 0.7)",
     width: "50%",
-    borderRadius: "20%",
+    borderRadius: 20,
     marginBottom: "5%",
     justifyContent: "center",
     alignItems: "center",

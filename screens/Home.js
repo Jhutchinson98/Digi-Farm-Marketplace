@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, TextInput, Image, ScrollView } from 'react-native';
 import ProfileCard from '../components/ProfileCard';
 import { Icon } from 'react-native-elements';

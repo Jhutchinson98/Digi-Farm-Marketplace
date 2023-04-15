@@ -1,12 +1,11 @@
-import React from 'react';
-import { useState } from 'react';
+import React, {useState} from 'react';
 import { Alert, Modal, StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
 
 function Messages({navigation, route}) {
 
   const Market = () => {
     navigation.goBack()
-    const [modalVisible, setModalVisible] = useState(false);
+    //const [modalVisible, setModalVisible] = React.useState(false);
   }
 
   return (
