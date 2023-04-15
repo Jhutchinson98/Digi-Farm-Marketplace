@@ -1,30 +1,68 @@
 import React from 'react'
-import { StyleSheet, Text, View, TouchableOpacity, TextInput, Image, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, TextInput, Image, } from 'react-native';
 
-function ProfileCard(props) {
+const ProfileCard = props => {
   return (
-    <View>
-        <TouchableOpacity>
-            <Image source={require('../assets/farmer.png')} style={styles.scrollBarItems}/>
-         </TouchableOpacity>
+    <View style={styles.container}>
+        <View style={styles.info}>
+            <Text style={styles.nameText}>{props.user} Marketplace</Text>
+            <View style={styles.ratings}>
+                <Text style={styles.ratingText}>Rating:</Text>
+                <Image source={require('../assets/icon.png')} style={styles.star}/>
+                <Image source={require('../assets/icon.png')} style={styles.star}/>
+                <Image source={require('../assets/icon.png')} style={styles.star}/>
+                <Image source={require('../assets/icon.png')} style={styles.star}/>
+                <Image source={require('../assets/icon.png')} style={styles.star}/>
+            </View>
+        </View>
+        <TouchableOpacity style={styles.profilePic}>
+            <Image source={require('../assets/farmer.png')} style={styles.picSize} />
+        </TouchableOpacity>
     </View>
   )
 }
 
 const styles = StyleSheet.create({
     container: {
+        display: 'flex',
+        flexDirection: 'row',
         color: "#7b5536",
-        backgroundColor: "#0c0af9",
-        alignItems: "center",
-        justifyContent: "center",
+        backgroundColor: "#FFFFE0",
         height: 150,
-        width: '100%'
+        width: '100%',
+        borderRadius: 15,
+        padding: 2
     },
-    scrollBarItems: {
-      height: 50,
-      width: 50,
-      marginLeft: 15,
-      marginTop: 10
+    info: {
+        justifyContent: 'flex-start',
+        width: '70%'
+    },
+    nameText: {
+        fontSize: 36
+    },
+    ratings: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center'
+    },
+    ratingText: {
+        fontSize: 24
+    },
+    star: {
+        height:25,
+        width: 25,
+        marginHorizontal: 5,
+        marginTop: 5
+    },
+    profilePic: {
+        justifyContent: 'flex-start',
+        alignContent: 'flex-end',
+    },
+    picSize: {
+        height: 75,
+        width: 75,
+        marginLeft: 15,
+        marginTop: 10
     },
 })
 

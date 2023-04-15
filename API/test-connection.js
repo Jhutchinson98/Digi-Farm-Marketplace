@@ -4,13 +4,16 @@ const process = require('process');
 const {authenticate} = require('@google-cloud/local-auth');
 const {google} = require('googleapis');
 
+const masterSpreadsheetID = '1wsTF_6Rwclr_uLoDka2fy0Rtw0izfdfetXUWwG8kr-E';
+
 // If modifying these scopes, delete token.json.
-const SCOPES = ['https://www.googleapis.com/auth/spreadsheets.readonly'];
+const SCOPES = ['https://www.googleapis.com/auth/spreadsheets.readonly', 'https://www.googleapis.com/auth/spreadsheets'];
 // The file token.json stores the user's access and refresh tokens, and is
 // created automatically when the authorization flow completes for the first
 // time.
 const TOKEN_PATH = path.join(process.cwd(), 'token.json');
 const CREDENTIALS_PATH = path.join(process.cwd(), './google-connection/credentials.json');
+
 
 /**
  * Reads previously authorized credentials from the save file.
@@ -65,23 +68,69 @@ async function authorize() {
   return client;
 }
 
-/**
- * Prints the names and majors of students in a sample spreadsheet:
- * @see https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit
- * @param {google.auth.OAuth2} auth The authenticated Google OAuth client.
- */
-async function listProfiles(auth) {
-  const sheets = google.sheets({version: 'v4', auth});
-  const res = await sheets.spreadsheets.values.get({
-    spreadsheetId: '1wsTF_6Rwclr_uLoDka2fy0Rtw0izfdfetXUWwG8kr',
-    range: 'Profiles!A2:D',
-  });
-  const rows = res.data.values;
-  if (!rows || rows.length === 0) {
-    console.log('No data found.');
-    return;
-  }
-  console.log(rows);
+async function returnAllProfiles(auth){
+    const sheets = google.sheets({version: 'v4', auth})
+
+    const res = await sheets.spreadsheets.values.get({
+        spreadsheetId: masterSpreadsheetID,
+        range: 'Profiles!A2:D',
+      });
+      const rows = res.data.values;
+      if (!rows || rows.length === 0) {
+        console.log('No data found.');
+        return 0;
+      }
+    
+    return rows;
 }
 
-authorize().then(listProfiles).catch(console.error);
+
+async function createNewProfile(auth, user){
+  
+    const service = google.sheets({version: 'v4', auth});
+
+    console.log(user)
+  
+    let values = [
+      [
+        user.id,
+        user.email,
+        user.name,
+        user.password
+      ]
+    ];
+  
+    const resource = {
+      values,
+    };
+  
+    try{
+      const result = await service.spreadsheets.values.append({
+        spreadsheetId: masterSpreadsheetID,
+        range: 'Profiles!A2:D',
+        valueInputOption: "RAW",
+        resource: resource
+      });
+      console.log(`Customer added: ${result.data.updates.updatedCells} cells appended`)
+  
+      const r = {status: 1}
+      return r;
+    }
+    catch (err) {
+      const r = {status: 0, message: err}
+      return r;
+    }
+  
+  }
+
+
+async function test(){
+    const allProfiles = await authorize().then(returnAllProfiles).catch(console.error);
+    console.log(allProfiles);
+}
+
+test()
+
+exports.authorize = authorize
+exports.returnAllProfiles = returnAllProfiles
+exports.createNewProfile = createNewProfile

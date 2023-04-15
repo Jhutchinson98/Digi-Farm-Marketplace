@@ -1,6 +1,7 @@
 import React, {useState} from 'react'
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, ScrollView } from 'react-native';
 import ProfileCard from '../components/ProfileCard'
+import MarketItem from '../components/MarketItem';
 
 function Market({navigation,route}) {
 
@@ -34,12 +35,29 @@ function Market({navigation,route}) {
             
             {/* User tag w/ info on user*/}
             <View style={styles.tag}>
-            <ProfileCard/>
+            <ProfileCard user="Username"/>
             </View>
 
             {/* Items being sold */}
             <View style={styles.items}>
-
+              <ScrollView>
+                <View style={styles.itemScroll}>
+                  <MarketItem style={styles.scroller}/>
+                  <MarketItem/>
+                </View>
+                <View style={styles.itemScroll}>
+                  <MarketItem style={styles.scroller}/>
+                  <MarketItem/>
+                </View>
+                <View style={styles.itemScroll}>
+                  <MarketItem style={styles.scroller}/>
+                  <MarketItem/>
+                </View>
+                <View style={styles.itemScroll}>
+                  <MarketItem style={styles.scroller}/>
+                  <MarketItem style={styles.scroller}/>
+                </View>
+              </ScrollView>
             </View>
         </View>
       )
@@ -48,24 +66,21 @@ function Market({navigation,route}) {
     const styles = StyleSheet.create({
     container: {
             flex: 1,
-            color: "#7b5536",
-            backgroundColor: "#fff",
+            backgroundColor: "#B9DDA5",//"#88AC37",
             alignItems: "center",
             justifyContent: "center",
     },
     homeButton: {
         borderRadius: 100,
-        //font: 
         height: 60,
         width: 60,
         alignItems: "center",
         justifyContent: "center",
-        backgroundColor: "#FFEE00"
+        backgroundColor: "#FCC88E"
       },
       header: {
         display: 'flex',
         flexDirection: 'row',
-        backgroundColor: '#ffffe0',
         justifyContent: 'center',
         alignItems: 'center',
         height: '10%',
@@ -86,17 +101,25 @@ function Market({navigation,route}) {
       },
       tag: {
         justifyContent: 'center',
-        backgroundColor: '#ffffe0',
         height: '15%',
         width: '85%',
         marginVertical: '2%'
       },
       items: {
         justifyContent: 'center',
-        backgroundColor: '#ffffe0',
-        height: '50%',
+        height: '60%',
         width: '85%',
-        marginVertical: '2%'
+        marginVertical: '5%'
+      },
+      scroller: {
+        margin: '5%'
+      },
+      itemScroll: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignContent: 'space-around',
+        justifyContent: 'space-evenly',
+        marginVertical: '2%',
       }
     })
 

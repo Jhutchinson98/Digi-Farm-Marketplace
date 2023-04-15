@@ -43,8 +43,7 @@ function Messages({navigation, route}) {
 const styles = StyleSheet.create({
   container: {
           flex: 1,
-          color: "#7b5536",
-          backgroundColor: "#fff",
+          backgroundColor: "#B9DDA5",
           alignItems: "center",
           justifyContent: "center",
   },

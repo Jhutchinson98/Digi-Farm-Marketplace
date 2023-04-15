@@ -15,6 +15,10 @@ function HomeScreen({navigation,route}) {
     navigation.navigate('Market')
   }
 
+  const Favorites = () =>{
+    navigation.navigate('Favorites')
+  }
+
   return (
     <View style={styles.container}>
     {/* <ProfileCard/> */}
@@ -46,13 +50,13 @@ function HomeScreen({navigation,route}) {
         <View style={styles.scrollBar}>
           <ScrollView horizontal={true}>
             <TouchableOpacity>
-              <Image source={require('../assets/farmer.png')} style={styles.scrollBarItems}/>
+              <Image source={require('../assets/farmer.png')} style={styles.scrollBarPictures}/>
             </TouchableOpacity>
             <TouchableOpacity>
-              <Image source={require('../assets/farmer.png')} style={styles.scrollBarItems}/>
+              <Image source={require('../assets/farmer.png')} style={styles.scrollBarPictures}/>
             </TouchableOpacity>
             <TouchableOpacity>
-              <Image source={require('../assets/farmer.png')} style={styles.scrollBarItems}/>
+              <Image source={require('../assets/farmer.png')} style={styles.scrollBarPictures}/>
             </TouchableOpacity>
           </ScrollView>
         </View>
@@ -60,34 +64,32 @@ function HomeScreen({navigation,route}) {
         {/* Bottom verticle scrollbar header area*/}
         <View style={styles.local}>
           <View style={styles.subLocal}>
-          <View style={styles.subA}>
-            <Text>Local Markets</Text>
-          </View>
-          <View style={styles.subB}>
-            <TouchableOpacity>
-              <Text>See All</Text>
-            </TouchableOpacity>
-          </View>
+            <View style={styles.subA}>
+              <Text>Local Markets</Text>
+            </View>
+            <View style={styles.seeAll}>
+              <TouchableOpacity>
+                <Text>See All</Text>
+              </TouchableOpacity>
+            </View>
           </View>
 
           {/* Bottom verticle scrollbar */}
           <View style={styles.localScroll}>
             <ScrollView>
-              <TouchableOpacity>
-                <Image source={require('../assets/farmer.png')} style={styles.scrollBarItems}/>
+              <TouchableOpacity onPress={Market} style={styles.scrollBarItems}>
+                <Image source={require('../assets/farmer.png')} style={styles.scrollBarPictures}/>
+                <Text style={styles.scrollBarText}>Marketplace 1</Text>
               </TouchableOpacity>
-              <TouchableOpacity>
-                <Image source={require('../assets/farmer.png')} style={styles.scrollBarItems}/>
+              <TouchableOpacity onPress={Market} style={styles.scrollBarItems}>
+                <Image source={require('../assets/farmer.png')} style={styles.scrollBarPictures}/>
+                <Text style={styles.scrollBarText}>Marketplace 2</Text>
               </TouchableOpacity>
-              <TouchableOpacity>
-                <Image source={require('../assets/farmer.png')} style={styles.scrollBarItems}/>
+              <TouchableOpacity onPress={Market} style={styles.scrollBarItems}>
+                <Image source={require('../assets/farmer.png')} style={styles.scrollBarPictures}/>
+                <Text style={styles.scrollBarText}>Marketplace 3</Text>
               </TouchableOpacity>
             </ScrollView>
-
-
-            <TouchableOpacity onPress={Market}>
-              <Text>Profile Card</Text>
-            </TouchableOpacity>
           </View>
         </View>
 
@@ -95,17 +97,14 @@ function HomeScreen({navigation,route}) {
         <View style={styles.nav}>
           <View>
             <TouchableOpacity>
-              <IconButton icon={props => <Icon name="home" {...props} />} />
+              <Icon name="map" />
+              <Text>Nearby</Text>
             </TouchableOpacity>
           </View>
           <View>
-            <TouchableOpacity>
-              <IconButton icon={props => <Icon name="map" {...props} />} />
-            </TouchableOpacity>
-          </View>
-          <View>
-            <TouchableOpacity>  
-              <IconButton icon={props => <Icon name="bookmark" {...props} />} />
+            <TouchableOpacity onPress={Favorites}>  
+              <Icon name="bookmark" />
+              <Text>Favorites</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -146,6 +145,8 @@ const styles = StyleSheet.create({
     top: -230,
     bottom: 0,
     transform: [{scaleY: 1/7}, {scaleX: 1/7}],
+    marginRight: "8%",
+    marginTop: "1.5%"
   },
   location:{
     marginTop:'2%',
@@ -155,13 +156,14 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     height: '100%',
     width: '50%',
-    marginTop: "10%"
+    marginTop: "10%",
+    marginLeft: "10%"
   },
   subB: {
     alignItems: 'flex-end',
     height: '100%',
     width: '50%',
-    marginTop: "10%"
+    marginTop: "10%",
   },
   profileButton: {
     borderRadius: 100,
@@ -192,34 +194,50 @@ const styles = StyleSheet.create({
     borderRadius: 20
   },
   
-  scrollBarItems: {
+  scrollBarPictures: {
     height: 150,
     width: 150,
-    marginLeft: 15,
-    marginTop: 10
+    marginLeft: 5,
+    marginTop: 5,
+  },
+  scrollBarText: {
+    marginLeft: "15%",
+    marginTop: "15%"
+  },
+  scrollBarItems: {
+    backgroundColor: "#D3D3D3",
+    borderRadius: 20,
+    marginBottom: "5%",
+    justifyContent: "flex-start",
+    flexDirection: "row",
+    marginLeft: "5%",
+    marginRight: "5%",
   },
   // V-Scroll
   local: {
     backgroundColor: '#ffffe0',
     justifyContent: 'center',
-    alignItems: 'center',
-    height: '35%',
+    //alignItems: 'center',
+    height: '40%',
     width: '85%',
-    marginVertical: '2%'
+    //marginVertical: '2%',
+    borderRadius: 20
   },
   subLocal: {
-    display: 'flex',
+    //display: 'flex',
     flexDirection: 'row',
+    marginBottom: "10%"
   },
   // Verticle scroll ***Need to get scrollbar to display 2 items side by side***
   localScroll: {
    // justifyContent: 'center',
     alignItems: 'center',
-    height: '90%',
+    height: "70%",
     width: '100%',
-    justifyContent: "space-between",
+    justifyContent: "flex-start" ,
     flexDirection: "row",
-    flexWrap: "wrap"
+    flexWrap: "wrap",
+    //marginTop:"5%"
   },
   // Nav
   nav: {
@@ -228,11 +246,22 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffe0',
     justifyContent: 'space-around',
     alignItems: 'center',
-    height: '10%',
+    height: '8%',
     width: '85%',
-    marginVertical: '2%',
+    //marginVertical: '1%',
+    marginTop: 5,
     borderRadius: 100
   },
+  // see-all button
+  seeAll: {
+    alignItems: 'center',
+    height: '40%',
+    width: '20%',
+    marginTop: "10%",
+    backgroundColor: "#FCC88E",
+    borderRadius: 20
+  
+  }
 })
 
 export default HomeScreen

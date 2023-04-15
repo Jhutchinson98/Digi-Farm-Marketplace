@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Alert, Modal, StyleSheet, Pressable, Text, View, TouchableOpacity, TextInput, ScrollView, Image} from 'react-native';
+import {Alert, Modal, Button, StyleSheet, Pressable, Text, View, TouchableOpacity, TextInput, ScrollView, Image} from 'react-native';
 import { launchImageLibrary } from 'react-native-image-picker';
 import { Icon } from 'react-native-elements';
 import { Stack, IconButton } from "@react-native-material/core";
@@ -14,15 +14,28 @@ function Profile({navigation,route}) {
   }
   //note : Also need to hide the add button when modal is visible
   const [modalVisible, setModalVisible]=useState(false);
+  const [addVisible, setAddVisible]=useState(true);
+
+  const handlePress = ()=>{
+    setAddVisible(false)
+    setModalVisible(true)
+  }
+  const handleClose = () =>{
+    setAddVisible(true)
+    setModalVisible(false)
+  }
 
   const [photo, setPhoto] = React.useState(null);
   const handleChoosePhoto = () => {
-    launchImageLibrary({ noData: true }, (response) => {
-      // console.log(response);
-      if (response) {
-        setPhoto(response);
+    const options = {
+      noData: true,
+    }
+    ImagePicker.launchImageLibrary(options, response => {
+      if (response.uri) {
+        //this.setState({ photo: response })
+        setPhoto(response)
       }
-    });
+    })
   };
 
   const [price, setPrice] = React.useState('');
@@ -47,31 +60,50 @@ function Profile({navigation,route}) {
 
   return (
     <View style={styles.container}>
+      
       <View style={styles.header}>
         <View>
           <View style={styles.homeButton}>
             <TouchableOpacity onPress={home}>
-              <Text>Home</Text>
+              <Icon name="home" />
             </TouchableOpacity>
           </View>
           <View style={styles.messageButton}>
             <TouchableOpacity onPress={messages}>
-              <Text style={styles.messageText}>Message</Text>
+              <Icon name="message" />
             </TouchableOpacity>
           </View>
           </View>
         </View>
+
+        <View style={styles.header2}>
+        <View >
+        <Image style={styles.marketImage} source={require('../assets/cheese.png')}/>
+        </View>
+          <View style={styles.subB}>
+            <Text style={styles.market}>Your Marketplace</Text>
+            <Text style={styles.rating}>Current Rating: 3.5 stars</Text>
+          </View>
+        </View>
+
         <View>
         <Modal
         animationType="slide"
         transparent={true}
         visible={modalVisible}
-        onRequestClose={() => {
-          Alert.alert('Modal has been closed.');
-          setModalVisible(!modalVisible);
-        }}>
+        onRequestClose={handleClose}
+        >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
+          <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+          {photo && (
+          <Image
+            source={{ uri: photo.uri }}
+            style={{ width: 300, height: 300 }}
+            />
+         )}
+        <Button title="Choose Photo" onPress={this.handleChoosePhoto} />
+      </View>
           <View style={styles.inputView}>
                 <TextInput
                     style={styles.modalText}
@@ -106,20 +138,39 @@ function Profile({navigation,route}) {
             </View>
             <Pressable
               style={[styles.button, styles.buttonClose]}
-              onPress={() => setModalVisible(!modalVisible)}>
+              onPress={handleClose}>
               <Text style={styles.textStyle}>Submit</Text>
             </Pressable>
           </View>
         </View>
       </Modal>
-      <Pressable style={styles.addButton} onPress={() => setModalVisible(true)}>
+
+      
+      <View>
+        {addVisible && (
+        <Pressable style={styles.addButton} visible={addVisible} onPress={() => handlePress()}>
           <Text style={styles.add}>Add +</Text>
-      </Pressable>
+        </Pressable>)}
       </View>
+      </View>
+
+
       <ScrollView style={styles.productList}>
-        <TouchableOpacity>
-          <Image source={require('../assets/farmer.png')} style={styles.marketItem} />
-          <Image source={require('../assets/farmer.png')} style={styles.marketItem} />
+        <TouchableOpacity style={styles.scrollBarItems} >
+          <Image source={require('../assets/farmer.png')} style={styles.scrollBarPictures} />
+          <Text style={styles.scrollBarText}>Item 1</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.scrollBarItems} >
+          <Image source={require('../assets/farmer.png')} style={styles.scrollBarPictures} />
+          <Text style={styles.scrollBarText}>Item 2</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.scrollBarItems} >
+          <Image source={require('../assets/farmer.png')} style={styles.scrollBarPictures} />
+          <Text style={styles.scrollBarText}>Item 3</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.scrollBarItems} >
+          <Image source={require('../assets/farmer.png')} style={styles.scrollBarPictures} />
+          <Text style={styles.scrollBarText}>Item 4</Text>
         </TouchableOpacity>
       </ScrollView>
     
@@ -141,6 +192,52 @@ const styles = StyleSheet.create({
     marginTop: "15%",
     marginLeft: "5%",
     backgroundColor: "#FCC88E"
+  },
+  marketImage:{
+    //justifyContent:'flex-start',
+   // marginLeft: '50%',
+    transform: [{scaleY: 1/4}, {scaleX: 1/4}],
+    //marginRight: "8%",
+    marginTop: "1.5%",
+    //marginRight: "30%"
+    //marginLeft: "40%",
+    marginRight: "-300%"
+    //marginRight: '50%',
+    //marginBottom: '50%',
+    //width:'%'
+  },
+  header2:{
+    display: 'flex',
+    flexDirection: 'row',
+    backgroundColor: '#ffffe0',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '12%',
+    width: '100%',
+    //marginVertical: '2%',
+    marginTop: "10%",
+    marginRight: "5%",
+    borderRadius: 20
+  },
+  subA:{
+    justifyContent: 'flex-start',
+    height: '100%',
+    //width: '50%',
+    marginTop: "10%",
+    //marginLeft: "%" ,
+    marginRight: "40%"
+  },
+  subB:{
+    justifyContent: 'flex-start',
+    flexDirection: 'column',
+    marginRight:"50%"
+  },
+  market:{
+   fontSize:30,
+   //fontFamily: 'OpticalFiber-2VWo',
+  },
+  rating:{
+    marginTop:'2%',
   },
   centeredView: {
     flex: 1,
@@ -204,8 +301,9 @@ const styles = StyleSheet.create({
     marginLeft: "7%",
     marginRight: "7%",
     marginBottom: "60%",
-    marginTop: "15%",
-    backgroundColor: "#D3D3D3" 
+    backgroundColor: "#D3D3D3",
+    borderRadius: 20,
+    height: "56%"
   },
   header:{
     backgroundColor: "#B9DDA5",
@@ -219,7 +317,12 @@ const styles = StyleSheet.create({
     margin: "10%",
     //width: "auto",
     //height: "100%"
-
+    height: 150,
+    width: 150,
+    marginLeft: 15,
+    marginTop: 10,
+    backgroundColor: "#FCC88E",
+    borderRadius: 20,
   },
   button: {
     borderRadius: 20,
@@ -247,6 +350,25 @@ const styles = StyleSheet.create({
     margin: 10,
     padding: 5,
     width: '105%',
+},
+scrollBarPictures: {
+  height: 150,
+  width: 150,
+  marginLeft: 15,
+  marginTop: 10,
+},
+scrollBarText: {
+  marginLeft: "15%",
+  marginTop: "15%"
+},
+scrollBarItems: {
+  backgroundColor: "#D3D3D3",
+  borderRadius: 20,
+  marginBottom: "5%",
+  justifyContent: "flex-start",
+  flexDirection: "row",
+  marginLeft: "5%",
+  marginRight: "5%",
 },
 
 })

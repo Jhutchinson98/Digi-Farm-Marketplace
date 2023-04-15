@@ -6,11 +6,13 @@ import Market from './screens/Market';
 import Profile from './screens/Profile';
 import CreatePost from './screens/CreatePost';
 import Messages from './screens/Messages';
+import Favorites from './screens/Favorites'
 import CreateAccount from './screens/CreateAccount';
 import Open from './screens/Open';
 import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import ImagePicker from 'react-native-image-picker';
 
 const Stack = createNativeStackNavigator();
 
@@ -49,6 +51,10 @@ export default function App() {
         <Stack.Screen
             name="Messages"
             component={Messages}
+        />
+        <Stack.Screen
+          name="Favorites"
+          component={Favorites}
         />
       </Stack.Navigator>
     </NavigationContainer>
