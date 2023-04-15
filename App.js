@@ -46,6 +46,10 @@ export default function App() {
             name="Market"
             component={Market}
         />
+        <Stack.Screen
+            name="Messages"
+            component={Messages}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

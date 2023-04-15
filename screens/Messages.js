@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 
 function Messages() {
   return (
-    <div>Messages</div>
+    <Text>Messages</Text>
   )
 }
 
