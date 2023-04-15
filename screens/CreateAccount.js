@@ -23,8 +23,10 @@ export default ({navigation}) => {
     }
 
     const create = () => {
+        //console.log("Creating Profile...")
         if(validate()){
-            //http request to server 
+            //http request to server
+            //console.log("Validated!") 
             
             const data = {
                 email: email,
@@ -32,14 +34,19 @@ export default ({navigation}) => {
                 password: password
             }
             
-            //console.log(data)
-            
+            console.log("data: ", data)
+            const saveUser = async() => {
+                await axios.post("http://10.15.5.56:19000", data);
+                console.log("Signup Successful!")
+            }   
         }
+        //console.log("Failed to validate")
     }
 
     const validate = () => {
         if(password !== confirmPassword) return false
         if(!emailRegex.test(email)) return false
+        return true
     }
 
     return (

@@ -1,5 +1,6 @@
 import React from 'react'
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import ProfileCard from '../components/ProfileCard'
 
 function Market({navigation,route}) {
 
@@ -13,6 +14,7 @@ function Market({navigation,route}) {
     
       return (
         <View style={styles.container}>
+            {/* Header */}
             <View style={styles.header}>
                 <View style={styles.subA}>
                     <TouchableOpacity onPress={home}>
@@ -29,8 +31,16 @@ function Market({navigation,route}) {
                     </TouchableOpacity>
                 </View>
             </View>
-            <View style={styles.tag}></View>
-            <View style={styles.items}></View>
+            
+            {/* User tag w/ info on user*/}
+            <View style={styles.tag}>
+            <ProfileCard/>
+            </View>
+
+            {/* Items being sold */}
+            <View style={styles.items}>
+
+            </View>
         </View>
       )
     }
@@ -50,12 +60,12 @@ function Market({navigation,route}) {
         width: 60,
         alignItems: "center",
         justifyContent: "center",
-        backgroundColor: "#FCC88E"
+        backgroundColor: "#FFEE00"
       },
       header: {
         display: 'flex',
         flexDirection: 'row',
-        backgroundColor: '#abcabc',
+        backgroundColor: '#ffffe0',
         justifyContent: 'center',
         alignItems: 'center',
         height: '10%',
@@ -76,14 +86,14 @@ function Market({navigation,route}) {
       },
       tag: {
         justifyContent: 'center',
-        backgroundColor: '#ffa102',
+        backgroundColor: '#ffffe0',
         height: '15%',
         width: '85%',
         marginVertical: '2%'
       },
       items: {
         justifyContent: 'center',
-        backgroundColor: '#adf319',
+        backgroundColor: '#ffffe0',
         height: '50%',
         width: '85%',
         marginVertical: '2%'
