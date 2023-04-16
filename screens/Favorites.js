@@ -24,7 +24,7 @@ function Favorites({navigation,route}) {
         </View>
         <View style={styles.subB}>
           <TouchableOpacity onPress={profile}>
-          <Image source={require('../assets/farmer.png')} style={styles.farmer}/>
+            <Image source={require('../assets/farmer.png')} style={styles.farmer}/>
           </TouchableOpacity>
         </View>
       </View>
@@ -90,11 +90,9 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     backgroundColor: '#ffffe0',
-    justifyContent: 'center',
-    alignItems: 'center',
     height: '10%',
     width: '85%',
-    marginVertical: '2%',
+    marginBottom: '2%',
     borderRadius: 40,
     marginTop: "10%",
     marginLeft: "7%"
@@ -103,14 +101,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'flex-start',
     height: '100%',
-    width: '50%',
   },
   subB: {
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'flex-end',
     height: '100%',
-    width: '50%',
-    marginRight: 15
+    marginRight: 15,
   },
   farmer: {
     position: 'relative',

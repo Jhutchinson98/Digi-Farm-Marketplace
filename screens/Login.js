@@ -10,13 +10,14 @@ import { StyleSheet,
     Button,
     TouchableOpacity,
   } from 'react-native';
+import Error from '../components/Error';
 
 
 function Login({navigation, route}) {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [marketplace, setMarketplace] = useState('');
+    const [error, setError] = useState('')
 
     // Checks username and password to log them in.
     const LogCall = () => {
@@ -39,10 +40,10 @@ function Login({navigation, route}) {
               })
             })
           } else {
-            console.log('no auth')
+            setError('Email and password do not match')
           }
         })
-        .catch(e => console.log(e))
+        .catch(() => setError('Server Error'))
         // Backdoor
         // navigation.navigate('Home')
     }
@@ -57,6 +58,7 @@ function Login({navigation, route}) {
 
    return (
     <View style={styles.container}>
+      {error ? <Error message={error} close={() => setError('')}/> : null }
       <View style={styles.titleContainer}>
         <Image source={require('../assets/logo.png')} style={styles.logo}/>
         {/* <Text style={styles.title}>DigiFarm</Text>
@@ -80,10 +82,10 @@ function Login({navigation, route}) {
           secureTextEntry={true}
           onChangeText={(password) => setPassword(password)}/> 
       </View> 
-      <TouchableOpacity>
-        <Text style={styles.forgot_button}>Forgot Password?</Text> 
+      <TouchableOpacity style={styles.forgot_button} onPress={() => setError('You probably shouldn\'t do that')}>
+        <Text style={styles.loginText}>Forgot Password?</Text> 
       </TouchableOpacity> 
-      <TouchableOpacity style={styles.loginBtn} onPress={LogCall}>
+      <TouchableOpacity style={styles.loginBtn} onPress={LogCall} disabled={!email || !password}>
         <Text style={styles.loginText}>Login</Text>
       </TouchableOpacity> 
       <TouchableOpacity style={styles.backBtn} onPress={backToOpen}>
@@ -94,6 +96,7 @@ function Login({navigation, route}) {
 }
 const styles = StyleSheet.create({
   container: {
+    paddingTop: 100,
     flex: 1,
     color: "#7b5536",
     backgroundColor: "rgba(255, 222, 144, 0.3)",
@@ -113,16 +116,18 @@ const styles = StyleSheet.create({
   },
   input: {
     color: "#7b5536",
-    textAlign: 'center', 
-    marginTop:10
+    textAlign: 'center',
+    fontWeight:"500",
+    padding:1,
+    fontSize:18, 
   },
   forgot_button: {
     height: 30,
-    marginBottom: 30,
-    marginTop: 30
+    marginBottom: 0,
+    marginTop: 20
   },
   loginText:{
-
+    color: "#7b5536",
   },
   title: {
     color: "#7b5536",
@@ -131,28 +136,26 @@ const styles = StyleSheet.create({
     fontWeight: 400
    },
    titleContainer: {
-    marginBottom: 50,
-    borderBottomColor: "#7b5536",
-    borderBottomWidth: 1
+    marginBottom: 100,
    },
    loginBtn: {
-    width: "80%",
+    width: "50%",
     borderRadius: 10,
     //font: 
     height: 50,
     alignItems: "center",
     justifyContent: "center",
-    marginTop: "10%",
+    marginTop: "5%",
     backgroundColor: "#FCC88E",
   },
   backBtn: {
-    width: "80%",
+    width: "50%",
     borderRadius: 10,
     //font: 
     height: 50,
     alignItems: "center",
     justifyContent: "center",
-    marginTop: "10%",
+    marginTop: "5%",
     backgroundColor: "#FCC88E",
   },
   logo: {

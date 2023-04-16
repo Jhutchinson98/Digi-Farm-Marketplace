@@ -24,7 +24,10 @@ function Open({navigation,route}){
   }
 
   React.useEffect(() => {
+    // Uncomment following line to clear token
+    //AsyncStorage.removeItem('token')
     AsyncStorage.getItem('token').then(token => {
+      if(token == null) return
       fetch('https://4eab-64-22-249-253.ngrok-free.app/authenticateToken', {
         method: 'post',
         headers: {'Content-Type': 'application/json'},

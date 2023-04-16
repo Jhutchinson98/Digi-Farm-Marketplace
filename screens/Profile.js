@@ -14,14 +14,11 @@ function Profile({navigation,route}) {
   }
   //note : Also need to hide the add button when modal is visible
   const [modalVisible, setModalVisible]=useState(false);
-  const [addVisible, setAddVisible]=useState(true);
 
   const handlePress = ()=>{
-    setAddVisible(false)
     setModalVisible(true)
   }
   const handleClose = () =>{
-    setAddVisible(true)
     setModalVisible(false)
   }
 
@@ -75,7 +72,7 @@ function Profile({navigation,route}) {
         </View>
 
         <View>
-        <Modal
+      <Modal
         animationType="slide"
         transparent={true}
         visible={modalVisible}
@@ -130,10 +127,9 @@ function Profile({navigation,route}) {
 
       
       <View>
-        {addVisible && (
-        <Pressable style={styles.addButton} visible={addVisible} onPress={() => handlePress()}>
+        <Pressable style={styles.addButton} onPress={() => handlePress()}>
           <Text style={styles.add}>Add +</Text>
-        </Pressable>)}
+        </Pressable>
       </View>
       </View>
 
@@ -388,6 +384,7 @@ scrollBarPictures: {
   height: 150,
   width: 150,
   marginLeft: 10,
+  borderRadius: 20
   //marginTop: 10,
 },
 scrollBarText: {

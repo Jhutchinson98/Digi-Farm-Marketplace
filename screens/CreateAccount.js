@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { 
     StyleSheet,
     Text,
@@ -10,15 +10,17 @@ import {
     Modal,
     Pressable,
 } from 'react-native';
+import Error from '../components/Error';
 
 const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
 
 export default ({navigation}) => {
 
-    const [email, setEmail] = React.useState('');
-    const [name, setName] = React.useState('');
-    const [password, setPassword] = React.useState('');
-    const [confirmPassword, setConfirmPassword] = React.useState('');
+    const [email, setEmail] = useState('');
+    const [name, setName] = useState('');
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [error, setError] = useState('');
     
     const backToOpen = () => {
         navigation.navigate('Open')
@@ -49,23 +51,28 @@ export default ({navigation}) => {
                 if (res.status === 200){
                     navigateToLogin()
                 }
-                else{
-                    console.log("server error")
-                }
-            }).catch(err => {
-                console.log(err)
-            })
+                else if (res.status === 409){
+                    setError('An account with that email already exists')
+                }else setError('Server error')
+            }).catch(() => setError('Server error'))
         }
     }
 
     const validate = () => {
-        if(password !== confirmPassword) return false
-        if(!emailRegex.test(email)) return false
+        if(password !== confirmPassword) {
+            setError('Passwords do not match')
+            return false
+        }
+        if(!emailRegex.test(email)) {
+            setError('Email is not valid')
+            return false
+        }
         return true
     }
 
     return (
         <View style={styles.container}>
+            {error ? <Error message={error} close={() => setError('')}/> : null }
             <Image source={require('../assets/slicedfruit.png')} style={styles.fruit}/>
             <Image source={require('../assets/italianveggies.png')} style={styles.veggies}/>
             <View style={styles.titleContainer}>
@@ -143,11 +150,10 @@ const styles = StyleSheet.create({
     input: {
         color: "#7b5536",
         textAlign: 'center',
-        marginTop:"5%",
         fontWeight:"500",
         padding:1,
         fontSize:18, 
-        marginTop: "1%"
+        marginTop: "2%"
     },
     title: {
         color: "#7b5536",
@@ -164,15 +170,15 @@ const styles = StyleSheet.create({
     },
     createButton: {
         backgroundColor: '#B9DDA5',
-        width: 100,
-        paddingVertical: 10,
+        width: '50%',
+        paddingVertical: 20,
         marginTop: 50,
         borderRadius: 10,
     },
     backButton:{
         backgroundColor: '#FCC88E',
-        width: 100,
-        paddingVertical: 10,
+        width: '50%',
+        paddingVertical: 20,
         marginTop: 20,
         borderRadius: 10,
     },
@@ -199,54 +205,7 @@ const styles = StyleSheet.create({
         top: -170,
         left: 120
     },
-
-    modal:{
-        position: 'absolute'
-    },
-
-    centeredView: {
-        position: 'absolute',
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginTop: 22,
-      },
-      modalView: {
-        margin: 20,
-        backgroundColor: 'white',
-        borderRadius: 20,
-        padding: 35,
-        alignItems: 'center',
-        shadowColor: '#000',
-        shadowOffset: {
-          width: 0,
-          height: 2,
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 4,
-        elevation: 5,
-      },
-      button: {
-        borderRadius: 20,
-        padding: 10,
-        elevation: 2,
-      },
-      buttonOpen: {
-        backgroundColor: '#F194FF',
-      },
-      buttonClose: {
-        backgroundColor: '#2196F3',
-      },
-      textStyle: {
-        color: 'white',
-        fontWeight: 'bold',
-        textAlign: 'center',
-      },
-      modalText: {
-        marginBottom: 15,
-        textAlign: 'center',
-      },
-      logo: {
+    logo: {
         position: 'absolute',
         transform: [{scaleY: 1/4}, {scaleX: 1/4}],
         top: -700,

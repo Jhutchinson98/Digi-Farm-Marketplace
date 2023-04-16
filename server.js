@@ -7,12 +7,8 @@ const jwt = require('jsonwebtoken')
 
 const jwtKey = 'secret'
 
-const idCol = 0
-const emailCol = 1
-const nameCol = 2
-const passwordCol = 3
-
 app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: true }))
 
 
 app.post('/login', async (req, res) => {
@@ -58,7 +54,7 @@ app.post('/createUser', async (req, res) => {
     }
   }
   catch {
-    res.status(400)
+    res.status(400).send()
   }
 })
 
