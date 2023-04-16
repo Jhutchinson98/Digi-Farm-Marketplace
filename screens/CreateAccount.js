@@ -8,6 +8,7 @@ import {
     Button,
     TouchableOpacity,
     Modal,
+    Pressable,
 } from 'react-native';
 
 const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
@@ -18,11 +19,13 @@ export default ({navigation}) => {
     const [name, setName] = React.useState('');
     const [password, setPassword] = React.useState('');
     const [confirmPassword, setConfirmPassword] = React.useState('');
-
-    const [accountCreated, setAccountCreated] = React.useState(false);
     
     const backToOpen = () => {
         navigation.navigate('Open')
+    }
+
+    const navigateToLogin = () => {
+        navigation.navigate('Login')
     }
 
     const create = () => {
@@ -37,26 +40,19 @@ export default ({navigation}) => {
                 name: name,
                 password: password
             }
-            
-            console.log("data: ", data)
 
-            
-            const url = "https://4eab-64-22-249-253.ngrok-free.app/createUser"
-
-            fetch(url, {
+            fetch("https://4eab-64-22-249-253.ngrok-free.app/createUser", {
                 method: "post",
                 headers: {"Content-Type": "application/json"},
                 body: JSON.stringify(data)
-            }).then((res) => res.json())
-            .then(res => {
+            }).then((res) => {
                 if (res.status === 200){
-                    setAccountCreated(true)
+                    navigateToLogin()
                 }
                 else{
-                    console.log("database error")
+                    console.log("server error")
                 }
-            })
-            .catch(err => {
+            }).catch(err => {
                 console.log(err)
             })
         }
@@ -124,20 +120,6 @@ export default ({navigation}) => {
             <TouchableOpacity style={styles.backButton} onPress={backToOpen}>
                 <Text style={styles.createText}>Back</Text>
             </TouchableOpacity>
-
-            <View>
-                <Modal
-                animationType="slide"
-                transparent={true}
-                visible={modalVisible}
-                onRequestClose={handleClose}
-                >
-                <View style={styles.centeredView}>
-                    <View style={styles.modalView}>                    
-                    </View>
-                </View>
-                </Modal>
-            </View>
         </View>
     )
 }

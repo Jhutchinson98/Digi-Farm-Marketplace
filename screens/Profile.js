@@ -66,7 +66,7 @@ function Profile({navigation,route}) {
 
         <View style={styles.header2}>
           <View >
-            <Image style={styles.marketImage} source={require('../assets/cheese.png')}/>
+            <Image style={styles.marketImage} source={require('../assets/farmer.png')}/>
           </View>
           <View style={styles.subB}>
             <Text style={styles.market}>Your Marketplace</Text>
@@ -84,12 +84,7 @@ function Profile({navigation,route}) {
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
           <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-          {photo && (
-          <Image
-            source={{ uri: photo.uri }}
-            style={{ width: 300, height: 300 }}
-            />
-         )}
+          
         {/*<Button style={{color:"#7b5536"}}title="Choose Photo" onPress={this.handleChoosePhoto} />*/}
       </View>
           <View style={styles.inputView}>
@@ -197,10 +192,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     //marginTop: "15%",
     marginLeft: 15,
-    backgroundColor: "#FCC88E"
+    backgroundColor: "#B9DDA5"
   },
   container:{
-    backgroundColor: "#B9DDA5"
+    backgroundColor: "#FCC88E" 
   },
   backButton: {
     borderRadius: 100,
@@ -222,7 +217,7 @@ const styles = StyleSheet.create({
     marginTop: "-18%",
     marginLeft: "80%",
     marginBottom: "1%",
-    backgroundColor: "#FCC88E"
+    backgroundColor: "#B9DDA5"
 
   },
   header: {
@@ -245,7 +240,7 @@ const styles = StyleSheet.create({
   marketImage:{
     //justifyContent:'flex-start',
    // marginLeft: '50%',
-    transform: [{scaleY: 1/4}, {scaleX: 1/4}],
+    transform: [{scaleY: 1/5}, {scaleX: 1/5}],
     //marginRight: "8%",
     marginTop: "1.5%",
     //marginRight: "30%"
@@ -262,10 +257,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     height: '12%',
-    width: '100%',
+    width: '90%',
     //marginVertical: '2%',
     marginTop: "5%",
-    marginRight: "5%",
+    marginLeft:"5%",
     borderRadius: 20
   },
   subA:{
@@ -293,7 +288,7 @@ const styles = StyleSheet.create({
     width: "100%",
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 22,
+    marginTop: 20,
   },
   add:{
     fontSize:20,
@@ -307,7 +302,7 @@ const styles = StyleSheet.create({
     width: "80%",
     justifyContent: 'center',
     alignItems: 'center',
-    height: "40%",
+    height: "30%",
     backgroundColor: 'white',
     borderRadius: 20,
     padding: 30,
@@ -322,7 +317,7 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   addButton:{
-    backgroundColor: "#FCC88E",
+    backgroundColor: "#B9DDA5",
     width: "50%",
     borderRadius: 15,
     marginBottom: "5%",

@@ -78,22 +78,30 @@ async function returnAllProfiles(auth){
     const res = await sheets.spreadsheets.values.get({
         spreadsheetId: masterSpreadsheetID,
         range: 'Profiles!A2:D',
-      });
-      const rows = res.data.values;
-      if (!rows || rows.length === 0) {
-        console.log('No data found.');
-        return 0;
-      }
-    
+    });
+    let rows = res.data.values;
+    if (!rows || rows.length === 0) {
+      console.log('No data found.');
+      return [];
+    }
     return rows;
 }
 
+async function getUserByEmail(auth, email){
+  const allProf = await returnAllProfiles(auth).catch(console.error);
+  for (let i = 0; i<allProf.length; i++){
+    if(allProf[i][emailCol] == email) return {
+      email: allProf[i][emailCol],
+      name: allProf[i][nameCol],
+      password: allProf[i][passwordCol],
+    }
+  }
+  return null
+
+}
+
 async function userLogin(auth, cred){
-
-  const allProf = await authorize().then(returnAllProfiles).catch(console.error);
-
-  console.log(cred)
-
+  const allProf = await returnAllProfiles(auth).catch(console.error);
   for (let i = 0; i<allProf.length; i++){
     if(allProf[i][emailCol] == cred.email && allProf[i][passwordCol] == cred.password) return true
   }
@@ -145,3 +153,4 @@ exports.authorize = authorize
 exports.returnAllProfiles = returnAllProfiles
 exports.createNewProfile = createNewProfile
 exports.userLogin = userLogin
+exports.getUserByEmail = getUserByEmail

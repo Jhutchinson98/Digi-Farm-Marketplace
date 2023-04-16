@@ -1,4 +1,5 @@
 import React from 'react'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet,
@@ -30,14 +31,20 @@ function Login({navigation, route}) {
           headers: {"Content-Type": "application/json"},
           body: JSON.stringify(user)
         })
-        .then(res => res.json())
         .then(res => {
-          console.log(res.token)
+          if (res.status == 200) {
+            res.json().then(body => {
+              AsyncStorage.setItem('token', body.token).then(() => {
+                navigation.navigate('Home')
+              })
+            })
+          } else {
+            console.log('no auth')
+          }
         })
         .catch(e => console.log(e))
-        if (true) {
-          navigation.navigate('Home')
-        }
+        // Backdoor
+        // navigation.navigate('Home')
     }
 
     const backToOpen = () => {

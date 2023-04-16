@@ -7,6 +7,9 @@ function Favorites({navigation,route}) {
   const home = () => {
     navigation.navigate('Home')
   }
+  const profile=()=>{
+    navigation.navigate('Profile')
+  }
 
 
   return (
@@ -20,7 +23,9 @@ function Favorites({navigation,route}) {
           </TouchableOpacity>
         </View>
         <View style={styles.subB}>
+          <TouchableOpacity onPress={profile}>
           <Image source={require('../assets/farmer.png')} style={styles.farmer}/>
+          </TouchableOpacity>
         </View>
       </View>
 
@@ -92,7 +97,7 @@ const styles = StyleSheet.create({
     marginVertical: '2%',
     borderRadius: 40,
     marginTop: "10%",
-    marginLeft: "5%"
+    marginLeft: "7%"
   },
   subA: {
     justifyContent: 'center',
@@ -111,6 +116,7 @@ const styles = StyleSheet.create({
     position: 'relative',
     left:215,
     top: '2%',
+    marginBottom: '10%',
     transform: [{scaleY: 1/7}, {scaleX: 1/7}],
   },
   backButton: {

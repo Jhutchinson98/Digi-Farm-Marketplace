@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StyleSheet, Text, View, TouchableOpacity, TextInput, Image, ScrollView } from 'react-native';
 import ProfileCard from '../components/ProfileCard';
 import { Icon } from 'react-native-elements';
@@ -6,6 +7,9 @@ import { Stack, IconButton } from "@react-native-material/core";
 //import Icon from "@expo/vector-icons/MaterialCommunityIcons";
 
 function HomeScreen({navigation,route}) {
+
+  const [email, setEmail] = useState("")
+  const [name, setName] = useState("")
 
   const ProfileCard = () => {
     navigation.navigate('Profile')
@@ -19,6 +23,29 @@ function HomeScreen({navigation,route}) {
     navigation.navigate('Favorites')
   }
 
+  React.useEffect(() => {
+    AsyncStorage.getItem('token')
+    .then(token => {
+      fetch('https://4eab-64-22-249-253.ngrok-free.app/authenticateToken', {
+        method: 'post',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ token })
+      })
+      .then(res => {
+        if (res.status == 200) {
+          res.json().then(body => {
+            setEmail(body.email)
+            setName(body.name)
+          })
+        } else {
+          console.log('token no good')
+        }
+      })
+      .catch(e => console.log(e))
+    })
+  }, [])
+
+
   return (
     <View style={styles.container}>
     {/* <ProfileCard/> */}
@@ -26,7 +53,7 @@ function HomeScreen({navigation,route}) {
         {/* Header w/ greeting, location, and profile*/}
         <View style={styles.header}>
           <View style={styles.subA}>
-            <Text style={styles.danny}>Hi, Danny</Text>
+            <Text style={styles.danny}>{name}</Text>
             <Text style={styles.location}>Springfield, MO</Text>
           </View>
           <View style={styles.subB}>
@@ -66,12 +93,7 @@ function HomeScreen({navigation,route}) {
         <View style={styles.local}>
           <View style={styles.subLocal}>
             <View style={styles.subA}>
-              <Text>Local Markets</Text>
-            </View>
-            <View style={styles.seeAll}>
-              <TouchableOpacity>
-                <Text>See All</Text>
-              </TouchableOpacity>
+              <Text style={{fontSize: 25, marginBottom:"-10%"}}>Local Markets</Text>
             </View>
           </View>
 

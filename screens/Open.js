@@ -1,4 +1,5 @@
 import React from 'react'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { 
@@ -21,6 +22,23 @@ function Open({navigation,route}){
   const createAccount = () => {
     navigation.navigate('CreateAccount')
   }
+
+  React.useEffect(() => {
+    AsyncStorage.getItem('token').then(token => {
+      fetch('https://4eab-64-22-249-253.ngrok-free.app/authenticateToken', {
+        method: 'post',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ token })
+      }).then(res => {
+        if (res.status == 200) {
+          console.log('good token')
+          navigation.navigate('Home')
+        } else {
+          console.log('token no good')
+        }
+      }).catch(e => console.log(e))
+    })
+  }, [])
   
   return (
       <View style={styles.container}>
