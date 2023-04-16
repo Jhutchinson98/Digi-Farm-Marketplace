@@ -36,7 +36,6 @@ app.post('/createUser', async (req, res) => {
   
   try {
     const user = {
-      id: 1,
       email: req.body.email,
       name: req.body.name,
       password: req.body.password
@@ -44,7 +43,7 @@ app.post('/createUser', async (req, res) => {
     const foundUser = await google.getUserByEmail(await google.authorize(), user.email)
     if(!foundUser){
       const result = await google.createNewProfile(await google.authorize(), user).catch(console.error)
-      if (result){
+      if (result.status){
         res.status(200).send()
       } else {
         res.status(400).send()
@@ -56,6 +55,24 @@ app.post('/createUser', async (req, res) => {
   catch {
     res.status(400).send()
   }
+})
+
+app.post('/addProduct', async (req, res) => {
+  console.log('adding product: ', req.body)
+  google.authorize()
+  google.getUserByEmail(await google.authorize(), req.body.userEmail)
+  .then(async (user) => google.createNewProduct(await google.authorize(), { userId: user.id, ...req.body }))
+  .then(result => {
+    if (result.status){
+      res.status(200).send()
+    } else {
+      res.status(500).send()
+    }
+  })
+  .catch(e => {
+    console.log(e)
+    res.status(500).send()
+  })
 })
 
 app.post('/authenticateToken', async (req, res) => {
@@ -70,6 +87,23 @@ app.post('/authenticateToken', async (req, res) => {
       res.status(401).send()
     }
   })
+})
+
+app.post('/getProducts', async (req, res) => {
+  const auth = await google.authorize()
+  google.getUserByEmail(auth, req.body.email)
+  .then(user => {
+    return google.getProductsByUserId(auth, user.id)
+  })
+  .then(products => res.status(200).json(products))
+  .catch(e => res.status(500).send())
+})
+
+app.get('/getMarkets', (req, res) => {
+  google.authorize()
+  .then(google.getProfiles)
+  .then(profiles => res.status(200).json(profiles))
+  .catch(() => res.status(500).send())
 })
 
 app.listen(3000, () => {

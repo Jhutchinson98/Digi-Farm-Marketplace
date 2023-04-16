@@ -3,14 +3,13 @@ import { StyleSheet, Text,TouchableOpacity, View, Image } from 'react-native';
 import { Icon } from 'react-native-elements';
 import { Stack, IconButton } from "@react-native-material/core";
 
-function Favorites({navigation,route}) {
+function Favorites({navigation, route}) {
   const home = () => {
     navigation.navigate('Home')
   }
   const profile=()=>{
     navigation.navigate('Profile')
   }
-
 
   return (
     <View style={styles.container}>
@@ -24,7 +23,7 @@ function Favorites({navigation,route}) {
         </View>
         <View style={styles.subB}>
           <TouchableOpacity onPress={profile}>
-            <Image source={require('../assets/farmer.png')} style={styles.farmer}/>
+            <Image source={require('../assets/farmer.png')} style={styles.picSize} />
           </TouchableOpacity>
         </View>
       </View>
@@ -41,6 +40,7 @@ function Favorites({navigation,route}) {
     </View>
   )
 }
+
 const styles = StyleSheet.create({
   title:{
     fontSize: 30,
@@ -56,18 +56,6 @@ const styles = StyleSheet.create({
     alignElements:'center',
 
   },
-  homeButton: {
-    borderRadius: 100,
-    //font: 
-    height: 60,
-    width: 60,
-    alignItems: "center",
-    justifyContent: "center",
-    //marginTop: "15%",
-    marginLeft: 40,
-    marginTop: 50,
-    backgroundColor: "#FCC88E"
-  },
   par:{
     marginLeft:'15%'
   },
@@ -78,7 +66,6 @@ const styles = StyleSheet.create({
     width: '85%',
     marginVertical: '2%',
     borderRadius: 100,
-    //backgroundColor: "#D3D3D3"
   },
   container:{
     flex: 1,
@@ -101,6 +88,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'flex-start',
     height: '100%',
+    width: "50%"
   },
   subB: {
     flex: 1,
@@ -108,13 +96,11 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
     height: '100%',
     marginRight: 15,
+    width: "50%"
   },
-  farmer: {
-    position: 'relative',
-    left:215,
-    top: '2%',
-    marginBottom: '10%',
-    transform: [{scaleY: 1/7}, {scaleX: 1/7}],
+  picSize: {
+    height: 75,
+    width: 75,
   },
   backButton: {
     borderRadius: 100,
@@ -132,6 +118,6 @@ const styles = StyleSheet.create({
     marginLeft: "7%",
     borderRadius: 20
   }
-
 })
+
 export default Favorites

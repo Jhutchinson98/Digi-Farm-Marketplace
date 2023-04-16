@@ -15,56 +15,55 @@ import Error from '../components/Error';
 
 function Login({navigation, route}) {
 
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [error, setError] = useState('')
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('')
 
-    // Checks username and password to log them in.
-    const LogCall = () => {
-        // If correct, reroutes user to Home. 
-        // Otherwise, tells user that username or password is incorrct
-        const user = {
-          email,
-          password
-        }
-        fetch('https://4eab-64-22-249-253.ngrok-free.app/login', {
-          method: 'post',
-          headers: {"Content-Type": "application/json"},
-          body: JSON.stringify(user)
+  // Checks username and password to log them in.
+  const LogCall = () => {
+    // If correct, reroutes user to Home. 
+    // Otherwise, tells user that username or password is incorrct
+    const user = {
+      email,
+      password
+    }
+
+    fetch('https://4eab-64-22-249-253.ngrok-free.app/login', {
+      method: 'post',
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify(user)
+    })
+    .then(res => {
+      if (res.status == 200) {
+        res.json().then(body => {
+          AsyncStorage.setItem('token', body.token).then(() => {
+            navigation.navigate('Home')
+          })
         })
-        .then(res => {
-          if (res.status == 200) {
-            res.json().then(body => {
-              AsyncStorage.setItem('token', body.token).then(() => {
-                navigation.navigate('Home')
-              })
-            })
-          } else {
-            setError('Email and password do not match')
-          }
-        })
-        .catch(() => setError('Server Error'))
-        // Backdoor
-        // navigation.navigate('Home')
-    }
+      } 
+      else {
+        setError('Email and password do not match')
+      }
+    })
+    .catch(() => setError('Server Error'))
+      // Backdoor
+      // navigation.navigate('Home')
+  }
 
-    const backToOpen = () => {
-      navigation.navigate('Open')
-    }
+  const backToOpen = () => {
+    navigation.navigate('Open')
+  }
 
-    const createAccount = () => {
-        navigation.navigate('CreateAccount')
-    }
+  const createAccount = () => {
+    navigation.navigate('CreateAccount')
+  }
 
-   return (
+  return (
     <View style={styles.container}>
       {error ? <Error message={error} close={() => setError('')}/> : null }
       <View style={styles.titleContainer}>
         <Image source={require('../assets/logo.png')} style={styles.logo}/>
-        {/* <Text style={styles.title}>DigiFarm</Text>
-        <Text style={styles.title}>Marketplace</Text> */}
-      </View>
-      
+      </View>    
       <StatusBar style="auto" />
       <View style={styles.inputView}>
         <TextInput
@@ -94,6 +93,7 @@ function Login({navigation, route}) {
     </View> 
   );
 }
+
 const styles = StyleSheet.create({
   container: {
     paddingTop: 100,
@@ -141,7 +141,6 @@ const styles = StyleSheet.create({
    loginBtn: {
     width: "50%",
     borderRadius: 10,
-    //font: 
     height: 50,
     alignItems: "center",
     justifyContent: "center",
@@ -150,8 +149,7 @@ const styles = StyleSheet.create({
   },
   backBtn: {
     width: "50%",
-    borderRadius: 10,
-    //font: 
+    borderRadius: 10, 
     height: 50,
     alignItems: "center",
     justifyContent: "center",
@@ -164,7 +162,7 @@ const styles = StyleSheet.create({
     top: -700,
     left: -665,
     marginBottom:"3%"
-},
+  },
 });
 
 

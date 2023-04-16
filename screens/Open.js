@@ -44,19 +44,19 @@ function Open({navigation,route}){
   }, [])
   
   return (
-      <View style={styles.container}>
-        <ImageBackground source={require('../assets/veggiebasket.png')} resizeMode="cover" style={styles.image} imageStyle={{opacity:0.80}}>
-          <Image source={require('../assets/logo.png')} style={styles.logo}/>
-          {/* <Text style={styles.marketPlace}>DigiFarm Marketplace</Text> */}
-          <TouchableOpacity style={styles.loginBtn} onPress={login}>
-            <Text style={styles.loginText}>Login</Text>
-          </TouchableOpacity> 
-          <TouchableOpacity style={styles.createBtn} onPress={createAccount}>
-            <Text style={styles.loginText}>Create An Account</Text>
-          </TouchableOpacity> 
-          </ImageBackground>
-      </View>
-    );
+    <View style={styles.container}>
+      <ImageBackground source={require('../assets/veggiebasket.png')} resizeMode="cover" style={styles.image} imageStyle={{opacity:0.80}}>
+        <Image source={require('../assets/logo.png')} style={styles.logo}/>
+        {/* <Text style={styles.marketPlace}>DigiFarm Marketplace</Text> */}
+        <TouchableOpacity style={styles.loginBtn} onPress={login}>
+          <Text style={styles.loginText}>Login</Text>
+        </TouchableOpacity> 
+        <TouchableOpacity style={styles.createBtn} onPress={createAccount}>
+          <Text style={styles.loginText}>Create An Account</Text>
+        </TouchableOpacity> 
+      </ImageBackground>
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
@@ -69,7 +69,6 @@ const styles = StyleSheet.create({
   image: {
     width:'100%',
     height:'100%',
-    //opacity:'15%'
   },
   inputView: {
     borderBottomColor: "#7b5536",
@@ -99,7 +98,6 @@ const styles = StyleSheet.create({
   },
   createBtn: {
     width: "80%",
-    //font:
     borderRadius: 10,
     height: 50,
     alignItems: "center",
@@ -109,8 +107,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#B9DDA5",
   },
   marketPlace: {
-    //width: "80%",
-    //font:
     borderRadius: 10,
     height: 50,
     fontSize: 30,
@@ -122,8 +118,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginTop: "30%",
     color: '#463629',
-    //marginLeft:"32.5%",
-    //backgroundColor: "#B9DDA5",
   },
   logo: {
     position: 'absolute',

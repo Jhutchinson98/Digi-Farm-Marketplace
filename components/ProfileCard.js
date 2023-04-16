@@ -5,7 +5,7 @@ const ProfileCard = props => {
   return (
     <View style={styles.container}>
         <View style={styles.info}>
-            <Text style={styles.nameText}>{props.user} Marketplace</Text>
+            <Text style={styles.nameText}>{props.name}</Text>
             <View style={styles.ratings}>
                 <Text style={styles.ratingText}>Rating:</Text>
                 <Image source={require('../assets/filledstar.png')} style={styles.star}/>
@@ -34,6 +34,8 @@ const styles = StyleSheet.create({
         padding: 2
     },
     info: {
+        paddingLeft: 10,
+        paddingTop: 10,
         justifyContent: 'flex-start',
         width: '70%'
     },

@@ -53,7 +53,8 @@ export default ({navigation}) => {
                 }
                 else if (res.status === 409){
                     setError('An account with that email already exists')
-                }else setError('Server error')
+                }
+                else setError('Server error')
             }).catch(() => setError('Server error'))
         }
     }
@@ -78,7 +79,6 @@ export default ({navigation}) => {
             <View style={styles.titleContainer}>
                 <Image source={require('../assets/logo.png')} style={styles.logo}/>
             </View>
-
             
             <View style={styles.inputView}>
                 <TextInput
@@ -104,6 +104,7 @@ export default ({navigation}) => {
                 <TextInput
                     style={styles.input}
                     placeholder='Password'
+                    secureTextEntry={true}
                     placeholderTextColor={"#7b5536"}
                     onChangeText={(e) => {
                         setPassword(e);
@@ -114,6 +115,7 @@ export default ({navigation}) => {
                 <TextInput
                     style={styles.input}
                     placeholder='Confirm Password'
+                    secureTextEntry={true}
                     placeholderTextColor={"#7b5536"}
                     onChangeText={(e) =>{
                         setConfirmPassword(e);
@@ -141,7 +143,6 @@ const styles = StyleSheet.create({
     },
     inputView: {
         borderBottomColor: "#7b5536",
-        //backgroundColor: "#7b5536",
         borderBottomWidth: 1,
         margin:0,
         padding: 10,

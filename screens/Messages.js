@@ -11,13 +11,11 @@ function Messages({navigation, route}) {
 
   return (
     <View style={styles.container}>
-
-
       <View style={styles.header}>
         <View style={styles.subA}>
           <TouchableOpacity onPress={Market}>
             <View style={styles.backButton}>
-                <Text>Back</Text>
+              <Text>Back</Text>
             </View>
           </TouchableOpacity>
         </View>
@@ -42,10 +40,8 @@ function Messages({navigation, route}) {
         style={styles.input}
         placeholder='Begin Typing...'
         multiline={true}
-        />
-        
+        />      
       </View>
-
     </View>
   )
 }
@@ -116,15 +112,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#468C43",
     borderRadius: 20
   },
-  text: {
-    display: 'flex',
-    flexDirection: 'row',
-    backgroundColor: '#ffffe0',
-    height: '6%',
-    width: '85%',
-    marginVertical: '2%',
-    borderRadius: 20
-  },
   backButton: {
     borderRadius: 100,
     height: 60,
@@ -134,34 +121,21 @@ const styles = StyleSheet.create({
     backgroundColor: "#FCC88E",
     marginLeft: 15
   },
-  other: {
-    width: '25%',
-  },
-  type: {
-    width: '75%',
-  },
   inputView: {
     margin: 10,
     padding: 5,
     width: '85%',
-},
-input: {
-    color: "#7b5536",
-    textAlign: 'center',
-},
-inputContainer: {
-    flex: 1,
-    color: "#7b5536",
-    backgroundColor: "rgba(255, 222, 144, 0.3)",
-    alignItems: "center",
-    justifyContent: "center",
-},
-font: {
-  fontSize:18,
-  color: "white",
-  margin: 10
-}
-
+    backgroundColor: '#FFFFE0'
+  },
+  input: {
+      color: "#FFFFE0",
+      textAlign: 'center',
+  },
+  font: {
+    fontSize:18,
+    color: "white",
+    margin: 10
+  }
 })
 
 export default Messages

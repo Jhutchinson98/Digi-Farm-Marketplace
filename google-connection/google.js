@@ -14,10 +14,37 @@ const SCOPES = ['https://www.googleapis.com/auth/spreadsheets.readonly', 'https:
 const TOKEN_PATH = path.join(process.cwd(), 'token.json');
 const CREDENTIALS_PATH = path.join(process.cwd(), 'credentials.json');
 
-const idCol = 0
-const emailCol = 1
-const nameCol = 2
-const passwordCol = 3
+const userCols = {
+  id: 0,
+  email: 1,
+  name: 2,
+  password: 3
+}
+const productCols = {
+  id: 0,
+  userId: 1,
+  name: 2,
+  quantity: 3,
+  count: 4,
+  trade: 5,
+  counter: 6,
+  price: 7
+}
+const ids = {
+  users: 0,
+  products: 0
+}
+
+function setCurrentId() {
+  authorize().then(returnAllProfiles).then(profiles => {
+    ids.users = Math.max(...profiles.map(p => p[userCols.id]))+1
+  })
+  authorize().then(returnAllProducts).then(products => {
+    ids.products = Math.max(...products.map(p => p[productCols.id]))+1
+  })
+}
+
+setCurrentId()
 
 /**
  * Reads previously authorized credentials from the save file.
@@ -87,23 +114,55 @@ async function returnAllProfiles(auth){
     return rows;
 }
 
+async function returnAllProducts(auth){
+  const sheets = google.sheets({version: 'v4', auth})
+
+  const res = await sheets.spreadsheets.values.get({
+      spreadsheetId: masterSpreadsheetID,
+      range: 'Products!A2:H',
+  });
+  let rows = res.data.values;
+  if (!rows || rows.length === 0) {
+    console.log('No data found.');
+    return [];
+  }
+  return rows;
+}
+
+async function getProfiles(auth){
+  const profs = await returnAllProfiles(auth)
+  return profs.map(p => ({
+      email: p[userCols.email],
+      name: p[userCols.name],
+  }))
+}
+
+async function getProductsByUserId(auth, userId){
+  const products = await returnAllProducts(auth)
+  return products.filter(p => p[productCols.userId] == userId).map(p => ({
+    name: p[productCols.name],
+    quantity: Number(p[productCols.quantity]),
+    count: Number(p[productCols.count]),
+    trade: Boolean(Number(p[productCols.trade])),
+    counter: Boolean(Number(p[productCols.counter])),
+    price: Number(p[productCols.price])
+  }))
+}
+
 async function getUserByEmail(auth, email){
   const allProf = await returnAllProfiles(auth).catch(console.error);
-  for (let i = 0; i<allProf.length; i++){
-    if(allProf[i][emailCol] == email) return {
-      email: allProf[i][emailCol],
-      name: allProf[i][nameCol],
-      password: allProf[i][passwordCol],
-    }
-  }
-  return null
-
+  return allProf.filter(p => p[userCols.email] == email).map(p => ({
+    id: p[userCols.id],
+    email: p[userCols.email],
+    name: p[userCols.name],
+    password: p[userCols.password],
+  }))[0]
 }
 
 async function userLogin(auth, cred){
   const allProf = await returnAllProfiles(auth).catch(console.error);
   for (let i = 0; i<allProf.length; i++){
-    if(allProf[i][emailCol] == cred.email && allProf[i][passwordCol] == cred.password) return true
+    if(allProf[i][userCols.email] == cred.email && allProf[i][userCols.password] == cred.password) return true
   }
   return false
 }
@@ -112,12 +171,10 @@ async function userLogin(auth, cred){
 async function createNewProfile(auth, user){
   
     const service = google.sheets({version: 'v4', auth});
-
-    console.log(user)
   
     let values = [
       [
-        user.id,
+        ids.users,
         user.email,
         user.name,
         user.password
@@ -134,23 +191,73 @@ async function createNewProfile(auth, user){
         range: 'Profiles!A2:D',
         valueInputOption: "RAW",
         resource: resource
-      });
-      console.log(`Customer added: ${result.data.updates.updatedCells} cells appended`)
-  
-      const r = {status: 1}
-      return r;
+      })
+      if (result.status == 200) {
+        const r = {status: 1}
+        ids.users += 1
+        return r;
+      }else {
+        const r = {status: 0, message: err}
+        return r;
+      }
     }
     catch (err) {
       const r = {status: 0, message: err}
       return r;
     }
   
+}
+
+async function createNewProduct(auth, product){
+  
+  const service = google.sheets({version: 'v4', auth});
+
+  let values = [
+    [
+      ids.products,
+      product.userId,
+      product.name,
+      product.quantity,
+      product.count,
+      product.trade,
+      product.counter,
+      product.price
+    ]
+  ];
+
+  const resource = {
+    values,
+  };
+
+  try{
+    const result = await service.spreadsheets.values.append({
+      spreadsheetId: masterSpreadsheetID,
+      range: 'Products!A2:H',
+      valueInputOption: "RAW",
+      resource: resource
+    })
+    if (result.status == 200) {
+      const r = {status: 1}
+      ids.products += 1
+      return r;
+    }else {
+      const r = {status: 0, message: err}
+      return r;
+    }
+  }
+  catch (err) {
+    const r = {status: 0, message: err}
+    return r;
   }
 
-
+}
 
 exports.authorize = authorize
 exports.returnAllProfiles = returnAllProfiles
 exports.createNewProfile = createNewProfile
 exports.userLogin = userLogin
 exports.getUserByEmail = getUserByEmail
+exports.returnAllProducts = returnAllProducts
+exports.createNewProduct = createNewProduct
+exports.getProductsByUserId = getProductsByUserId
+exports.getProfiles = getProfiles

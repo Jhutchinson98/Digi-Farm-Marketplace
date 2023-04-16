@@ -1,8 +1,14 @@
 import React, {useState} from 'react';
-import {Alert, Modal, Button, StyleSheet, Pressable, Text, View, TouchableOpacity, TextInput, ScrollView, Image} from 'react-native';
+import {Alert, Button,Modal,Switch,StyleSheet, Pressable, Text, View, TouchableOpacity, TextInput, ScrollView, Image} from 'react-native';
 import { launchImageLibrary } from 'react-native-image-picker';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+//import Modal from 'react-responsive-modal';
 import { Icon } from 'react-native-elements';
 import { Stack, IconButton } from "@react-native-material/core";
+import Error from '../components/Error';
+import Success from '../components/Success';
+
+const productImages = [require('../assets/yogurt.png'), require('../assets/milkHoney.jpg'), require('../assets/muffin.png')]
 
 function Profile({navigation,route}) {
 
@@ -34,18 +40,97 @@ function Profile({navigation,route}) {
       }
     })
   };
+  
+  const handleAddProduct = () => {
+    handleClose()
+    const data = {
+      userEmail: email,
+      name: itemName,
+      quantity: quantity,
+      count: itemCount,
+      trade: acceptTrade,
+      counter: acceptCounter,
+      price: price
+    }
 
+    fetch('https://4eab-64-22-249-253.ngrok-free.app/addProduct', {
+      method: 'post',
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify(data)
+    })
+    .then(res => {
+      if (res.status == 200){
+        setSuccess('Product succesfully added')
+        retrieveProducts(email)
+      }
+    })
+    .catch(e => {
+      setError('Server error')
+    })
+  }
+
+  const authorizeToken = (callback) => {
+    AsyncStorage.getItem('token').then(token => {
+      if(token == null || token == '') {
+        navigation.navigate('Open')
+        return
+      }
+      fetch('https://4eab-64-22-249-253.ngrok-free.app/authenticateToken', {
+        method: 'post',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ token })
+      }).then(res => {
+        if (res.status == 200) {
+          res.json().then(body => {
+            setEmail(body.email)
+            setName(body.name)
+            retrieveProducts(body.email)
+          })
+        } else {
+          navigation.navigate('Open')
+        }
+      }).catch(e => {
+        navigation.navigate('Open')
+      })
+    })
+  }
+
+  const retrieveProducts = (userEmail) => {
+    fetch('https://4eab-64-22-249-253.ngrok-free.app/getProducts', {
+      method: 'post',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ email: userEmail })
+    }).then(res => {
+      if (res.status == 200){
+        res.json().then(prods => {
+          setProducts(prods)
+        })
+      } else {
+        setError('There was a problem retrieving the products')
+      }
+    })
+  }
+  
+  React.useEffect(() => {
+    authorizeToken()
+  }, [])
+
+  const [email, setEmail] = useState("")
+  const [name, setName] = useState("")
   const [price, setPrice] = React.useState('');
   const [itemName, setItemName] = React.useState('');
   const [quantity, setQuantity] = React.useState(0);
   const [itemCount, setItemCount] = React.useState('');
-  const [acceptTrade, setAcceptTrade] = React.useState(false);
-  const [acceptCounter, setAcceptCounter] = React.useState(false);
-  const [confirmPassword, setConfirmPassword] = React.useState('');
+  const [acceptTrade, setAcceptTrade] = React.useState(0);
+  const [acceptCounter, setAcceptCounter] = React.useState(0);
+  const [products, setProducts] = React.useState([]);
+  const [error, setError] = React.useState('');
+  const [success, setSuccess] = React.useState('');
 
   return (
     <View style={styles.container}>
-      
+      {error ? <Error message={error} close={() => setError('')}/> : null }
+      {success ? <Success message={success} close={() => setSuccess('')}/> : null }
       <View style={styles.header}>
         <View>
           <View style={styles.homeButton}>
@@ -58,140 +143,153 @@ function Profile({navigation,route}) {
               <Icon name="message" />
             </TouchableOpacity>
           </View>
-          </View>
         </View>
-
-        <View style={styles.header2}>
-          <View >
-            <Image style={styles.marketImage} source={require('../assets/farmer.png')}/>
-          </View>
-          <View style={styles.subB}>
-            <Text style={styles.market}>Your Marketplace</Text>
-            <Text style={styles.rating}>Current Rating: 3.5 stars</Text>
-          </View>
-        </View>
-
-        <View>
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={handleClose}
-        >
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-          <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-          
-        {/*<Button style={{color:"#7b5536"}}title="Choose Photo" onPress={this.handleChoosePhoto} />*/}
       </View>
-          <View style={styles.inputView}>
-                <TextInput
-                    style={styles.modalText}
-                    placeholder='ItemName'
-                    placeholderTextColor={"#7b5536"}
-                    onChangeText={(e) => {
-                        setItemName(e)
-                    }}
-                />
-            </View>
-            <View style={styles.inputView}>
-                <TextInput
-                    style={styles.modalText}
-                    placeholder='Quantity Available'
-                    keyboardType = 'number-pad'
-                    placeholderTextColor={"#7b5536"}
-                    onChangeText={(e) => {
-                        setQuantity(e)
-                    }}
-                />
-            </View>
-            <View style={styles.inputView}>
-                <TextInput
-                    style={styles.modalText}
-                    placeholder='Count per Item'
-                    keyboardType = 'number-pad'
-                    placeholderTextColor={"#7b5536"}
-                    onChangeText={(e) => {
-                        setItemCount(e)
-                    }}
-                />
-            </View>
-            <Pressable
-              style={[styles.button, styles.buttonClose]}
-              onPress={handleClose}>
-              <Text style={styles.textStyle}>Submit</Text>
-            </Pressable>
-          </View>
-        </View>
-      </Modal>
 
-      
+      <View style={styles.header2}>
+        <View style={{marginLeft:'10%'}}>
+          <Image style={styles.marketImage} source={require('../assets/farmer.png')}/>
+        </View>
+        <View style={{marginRight:"40%"}}>
+          <Text style={styles.market}>{ name }</Text>
+          <Text style={styles.rating}>Current Rating: 3.875 stars</Text>
+        </View>
+      </View>
+
       <View>
-        <Pressable style={styles.addButton} onPress={() => handlePress()}>
-          <Text style={styles.add}>Add +</Text>
-        </Pressable>
-      </View>
-      </View>
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={handleClose}
+          >
+          <ScrollView contentContainerStyle={styles.scroll}>
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>       
+              </View>
+              <View style={styles.buttonView}>
+              <Pressable
+                style={[styles.button, styles.buttonClose]}
+                onPress={handleAddProduct}>
+                <Text style={styles.textStyle}>Submit</Text>
+              </Pressable>
+              
+              <Pressable
+                style={[styles.button2, styles.buttonClose2]}
+                onPress={handleClose}>
+                <Text style={styles.textStyle2}>Close</Text>
+              </Pressable>
+              </View>
 
+              <View style={styles.inputView}>
+                <TextInput
+                  style={styles.modalText}
+                  placeholder='ItemName'
+                  placeholderTextColor={"#7b5536"}
+                  onChangeText={(e) => {
+                    setItemName(e)
+                    }}
+                />
+                </View>
+                <View style={styles.inputView}>
+                  <TextInput
+                    style={styles.modalText}
+                    placeholder='Price'
+                    keyboardType = 'number-pad'
+                    placeholderTextColor={"#7b5536"}
+                    onChangeText={(e) => {
+                      setPrice(e)
+                    }}
+                  />
+                </View>
+
+              
+              <View style={styles.inputView}>
+                <TextInput
+                  style={styles.modalText}
+                  placeholder='Quantity Available'
+                  keyboardType = 'number-pad'
+                  placeholderTextColor={"#7b5536"}
+                  onChangeText={(e) => {
+                    setQuantity(e)
+                  }}
+                  />
+              </View>
+              <View style={styles.inputView}>
+                <TextInput
+                  style={styles.modalText}
+                  placeholder='Count per Item'
+                  keyboardType = 'number-pad'
+                  placeholderTextColor={"#7b5536"}
+                  onChangeText={(e) => {
+                    setItemCount(e)
+                  }}
+                />
+              </View>
+              <View style={styles.inputView}>
+                <Text style={{color: "#7b5536"}}>Accept counter offers?</Text>
+                <TouchableOpacity onPress={() => setAcceptCounter(1)}>
+                  <Text style={{ fontSize: 20, paddingLeft: 10, paddingRight: 10, backgroundColor: !acceptCounter ? 'red' : 'white', backgroundColor: acceptCounter ? 'green' : 'white', color: acceptCounter ? 'white' : 'black', borderRadius: 10}}>Yes</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={()=>setAcceptCounter(0)}>
+                  <Text style={{ fontSize: 20, paddingLeft: 10, paddingRight: 10, backgroundColor: !acceptCounter ? 'red' : 'white', backgroundColor: !acceptCounter ? 'red' : 'white',color: !acceptCounter ? 'white' : 'black', borderRadius: 10}}>No</Text>
+                </TouchableOpacity>
+              </View>
+              <View style={styles.inputView}>
+                <Text style={{color: "#7b5536"}}>Accept trade offers?</Text>
+                <TouchableOpacity onPress={() => setAcceptTrade(1)}>
+                  <Text style={{ fontSize: 20, paddingLeft: 10, paddingRight: 10, backgroundColor: acceptTrade ? 'green' : 'white', color: acceptTrade ? 'white' : 'black', borderRadius: 10}}>Yes</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={()=>setAcceptTrade(0)}>
+                  <Text style={{ fontSize: 20, paddingLeft: 10, paddingRight: 10, backgroundColor: !acceptTrade ? 'red' : 'white',color: !acceptTrade ? 'white' : 'black', borderRadius: 10}}>No</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+          </ScrollView>
+        </Modal>
+        <View>
+          <Pressable style={styles.addButton} onPress={() => handlePress()}>
+            <Text style={styles.add}>Add +</Text>
+          </Pressable>
+        </View>
+      </View>
 
       <ScrollView style={styles.productList}>
-        <TouchableOpacity style={styles.scrollBarItems} >
-          <Image source={require('../assets/yogurt.png')} style={styles.scrollBarPictures} />
-          <View style={styles.scrollBarTextContainer}>
-          <Text style={styles.scrollBarText}>Churned Yogurt</Text>
-          <Text style={styles.scrollBarText}>Quantity: 10</Text>
-          <Text style={styles.scrollBarText}>Count: 1</Text>
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.scrollBarItems} >
-          <Image source={require('../assets/muffin.png')} style={styles.scrollBarPictures} />
-          <View style={styles.scrollBarTextContainer}>
-          <Text style={styles.scrollBarText}>Baked Muffins</Text>
-          <Text style={styles.scrollBarText}>Quantity: 4</Text>
-          <Text style={styles.scrollBarText}>Count: 2</Text>
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.scrollBarItems} >
-          <Image source={require('../assets/milkHoney.jpg')} style={styles.scrollBarPictures} />
-          <View style={styles.scrollBarTextContainer}>
-          <Text style={styles.scrollBarText}>Fresh Cow Milk</Text>
-          <Text style={styles.scrollBarText}>Quantity: 6</Text>
-          <Text style={styles.scrollBarText}>Count: 1</Text>
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.scrollBarItems} >
-          <Image source={require('../assets/salad.jpeg')} style={styles.scrollBarPictures} />
-          <View style={styles.scrollBarTextContainer}>
-          <View style={styles.scrollBarTextContainer}>
-          <Text style={styles.scrollBarText}>Chopped Salad</Text>
-          <Text style={styles.scrollBarText}>Quantity: 12</Text>
-          <Text style={styles.scrollBarText}>Count: 2</Text>
-          </View>
-          </View>
-        </TouchableOpacity>
+        {products.map((product, i) => (
+          <TouchableOpacity style={styles.scrollBarItems} key={i}>
+            <Image source={productImages[Math.floor(Math.random() * productImages.length)]} style={styles.scrollBarPictures} />
+            <View style={styles.scrollBarTextContainer}>
+              <Text style={styles.scrollBarTitle}>{product.name}</Text>
+              <Text style={styles.scrollBarText}>Quantity: {product.quantity}</Text>
+              <Text style={styles.scrollBarText}>Count: {product.count}</Text>
+              <Text style={styles.scrollBarText}>Accepting Trade: {product.trade ? 'Yes' : 'No'}</Text>
+              <Text style={styles.scrollBarText}>Accepting Counter: {product.counter? 'Yes':'No'}</Text>
+            </View>
+          </TouchableOpacity>
+        ))}
       </ScrollView>
-    
-      <View>
-        
-      </View>
     </View>
   )
 }
 
 const styles = StyleSheet.create({
-  homeButton: {
-    borderRadius: 100,
-    //font: 
-    height: 60,
-    width: 60,
-    alignItems: "center",
-    justifyContent: "center",
-    //marginTop: "15%",
-    marginLeft: 15,
-    backgroundColor: "#B9DDA5"
+  add:{
+    fontSize:20,
+    fontWeight: 400,
   },
-  container:{
-    backgroundColor: "#FCC88E" 
+  addButton:{
+    backgroundColor: "#B9DDA5",
+    width: "50%",
+    borderRadius: 15,
+    marginBottom: "5%",
+    justifyContent: "center",
+    alignItems: "center",
+    marginLeft: "5%",
+    marginTop:"5%",
+    padding: 10,
+    marginRight: "5%"
   },
   backButton: {
     borderRadius: 100,
@@ -202,19 +300,53 @@ const styles = StyleSheet.create({
     backgroundColor: "#FCC88E",
     marginLeft: 15
   },
-  messageButton:{
-    borderRadius: 100,
-    borderColor: "#643F6E",
-    height: 55,
-    width: 55,
-    alignItems: "center",
-    justifyContent: "center",
-    //justifyContent: "flex-start",
-    marginTop: "-18%",
-    marginLeft: "80%",
-    marginBottom: "1%",
-    backgroundColor: "#B9DDA5"
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+    backgroundColor:"#643F6E",
+    flexDirection:'row'
+  },
+  button2: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+    backgroundColor:"#FCC88E",
+    flexDirection:'row',
+    marginLeft: 10
 
+  },
+  buttonClose: {
+    backgroundColor: "#643F6E",
+    flexDirection:'row'
+  },
+  buttonClose2:{
+    backgroundColor:"#FCC88E",
+    flexDirection:'row',
+  },
+  buttonOpen: {
+    backgroundColor: "#643F6E",
+    flexDirection: 'row'
+  },
+  buttonView:{
+    margin: 10,
+    flexDirection: 'row',
+    marginTop: "5%",
+    justifyContent: 'center',
+    alignContent: 'center',
+    flexDirection:'row',
+    padding: 5,
+    width: '105%',
+  },
+  centeredView: {
+    flex: 1,
+    width: "100%",
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: "-10%",
+  },
+  container:{
+    backgroundColor: "#FCC88E", 
   },
   header: {
     display: 'flex',
@@ -229,23 +361,6 @@ const styles = StyleSheet.create({
     marginLeft: '7%',
     borderRadius: 50
   },
-  scrollBarTextContainer:{
-    justifyContent:"center",
-    alignItems:"center",
-  },
-  marketImage:{
-    //justifyContent:'flex-start',
-   // marginLeft: '50%',
-    transform: [{scaleY: 1/5}, {scaleX: 1/5}],
-    //marginRight: "8%",
-    marginTop: "1.5%",
-    //marginRight: "30%"
-    //marginLeft: "40%",
-    marginRight: "-300%"
-    //marginRight: '50%',
-    //marginBottom: '50%',
-    //width:'%'
-  },
   header2:{
     display: 'flex',
     flexDirection: 'row',
@@ -254,51 +369,74 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     height: '12%',
     width: '90%',
-    //marginVertical: '2%',
     marginTop: "5%",
     marginLeft:"5%",
     borderRadius: 20
   },
-  subA:{
-    justifyContent: 'flex-start',
-    height: '100%',
-    //width: '50%',
-    marginTop: "10%",
-    //marginLeft: "%" ,
-    marginRight: "40%"
+  homeButton: {
+    borderRadius: 100,
+    height: 60,
+    width: 60,
+    alignItems: "center",
+    justifyContent: "center",
+    marginLeft: 15,
+    backgroundColor: "#B9DDA5"
   },
-  subB:{
-    justifyContent: 'flex-start',
-    flexDirection: 'column',
-    marginRight:"50%"
+  inputView: {
+    borderBottomColor: "#7b5536",
+    borderBottomWidth: 1,
+    margin: 10,
+    flexDirection: 'row',
+    marginTop: "5%",
+    justifyContent: 'center',
+    alignContent: 'center',
+    flexDirection:'row',
+    padding: 4,
+    width: '105%',
   },
   market:{
-   fontSize:30,
-   //fontFamily: 'OpticalFiber-2VWo',
+    fontSize:25,
   },
-  rating:{
-    marginTop:'2%',
+  marketImage:{
+    transform: [{scaleY: 1/6}, {scaleX: 1/6}],
+    marginTop: "1.5%",
+    marginRight: "-300%"
   },
-  centeredView: {
-    flex: 1,
-    width: "100%",
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 20,
+  marketItem:{
+    margin: "10%",
+    height: 150,
+    width: 150,
+    marginLeft: 10,
+    marginTop: 10,
+    borderRadius: 20,
+    justifyContent:'center',
+    alignContent:'center'
   },
-  add:{
-    fontSize:20,
-    fontWeight: 300,
+  messageButton:{
+    borderRadius: 100,
+    borderColor: "#643F6E",
+    height: 55,
+    width: 55,
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: "-18%",
+    marginLeft: "80%",
+    marginBottom: "1%",
+    backgroundColor: "#B9DDA5"
   },
   messageText:{
     color:'#FFFFFF'
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: 'center',
   },
   modalView: {
     margin: 20,
     width: "80%",
     justifyContent: 'center',
     alignItems: 'center',
-    height: "30%",
+    height: "80%",
     backgroundColor: 'white',
     borderRadius: 20,
     padding: 30,
@@ -312,54 +450,86 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
   },
-  addButton:{
-    backgroundColor: "#B9DDA5",
-    width: "50%",
-    borderRadius: 15,
-    marginBottom: "5%",
-    justifyContent: "center",
-    alignItems: "center",
-    marginLeft: "5%",
-    marginTop:"5%",
-    padding: 10,
-    marginRight: "5%"
-  },
-  
   productList: {
     marginLeft: "3%",
     marginRight: "3%",
     marginBottom: "60%",
     backgroundColor: "#EBE4F6",
+    borderTopWidth: 5,
+    borderTopColor: "#EBE4F6",
     borderRadius: 10,
     borderWeight:3,
     borderColor: "#FFFFF",
     height: "56%",
-    padding:7
+    padding:8
   },
-
-  marketItem:{
-    margin: "10%",
-    //width: "auto",
-    //height: "100%"
+  rating:{
+    marginTop:'2%',
+  },
+  scroll: {
+    alignItems: 'center',
+    height: "70%",
+    width: '100%',
+    justifyContent: "flex-start" ,
+    flexDirection: "row",
+    flexWrap: "wrap",
+    marginTop:"40%"
+  },
+  scrollBarTitle:{
+    fontSize:20,
+    flexDirection: 'column',
+    marginLeft: "15%",
+    marginRight:"10%",
+    marginTop: "15%",
+    marginRight: "-10%",
+    fontSize:20,
+    color: 'black',
+    fontWeight: 800
+  },
+  scrollBarItems: {
+    backgroundColor: "#B89AE8",
+    borderRadius: 20,
+    marginBottom: "5%",
+    justifyContent: "flex-start",
+    flexDirection: "row",
+    //marginLeft: "2%",
+    //marginRight: "%",
+    padding:10
+  },
+  scrollBarPictures: {
     height: 150,
     width: 150,
-    marginLeft: 10,
-    marginTop: 10,
-    //backgroundColor: "#FCC88E",
-    borderRadius: 20,
-    
+    marginTop:'7%',
+    marginBottom:'7%',
+    marginLeft: "3%",
+    borderRadius: 20
   },
-  button: {
-    borderRadius: 20,
-    padding: 10,
-    elevation: 2,
-    backgroundColor:'#F194FF'
+  scrollBarText: {
+    marginLeft: "15%",
+    marginRight:"0%",
+    marginBottom:"5%",
+    marginTop: "5%",
+    marginRight: "-10%",
+    fontSize:13,
+    color: 'black',
+    fontWeight: 600
   },
-  buttonOpen: {
-    backgroundColor: '#F194FF',
+  scrollBarTextContainer:{
+    justifyContent:"center",
+    //alignItems:"center",
+    marginRight:"13%"
   },
-  buttonClose: {
-    backgroundColor: "#643F6E",
+  subA:{
+    justifyContent: 'flex-start',
+    height: '100%',
+    marginTop: "10%",
+    marginRight: "40%"
+  },
+  subB:{
+    justifyContent: 'flex-start',
+    flexDirection: 'row',
+    marginRight:"50%",
+    marginLeft: "10%"
   },
   textStyle: {
     color: 'white',
@@ -367,42 +537,13 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     backgroundColor: "#643F6E"
   },
-  modalText: {
-    marginBottom: 15,
+  textStyle2:{
+    fontWeight: 'bold',
+    color: 'black',
     textAlign: 'center',
+    backgroundColor: "#FCC88E"
   },
-  inputView: {
-    borderBottomColor: "#7b5536",
-    borderBottomWidth: 1,
-    margin: 10,
-    justifyContent: 'center',
-    alignContent: 'center',
-    padding: 5,
-    width: '105%',
-},
-scrollBarPictures: {
-  height: 150,
-  width: 150,
-  marginLeft: 10,
-  borderRadius: 20
-  //marginTop: 10,
-},
-scrollBarText: {
-  marginLeft: "15%",
-  marginTop: "15%"
-},
-scrollBarItems: {
-  backgroundColor: "#B89AE8",
-  borderRadius: 20,
-  marginBottom: "5%",
-  justifyContent: "flex-start",
-  flexDirection: "row",
-  marginLeft: "2%",
-  marginRight: "2%",
-  padding:10
-
-},
-topButtonHeader:{
+  topButtonHeader:{
     display: 'flex',
     flexDirection: 'row',
     backgroundColor: '#ffffe0',
@@ -413,7 +554,6 @@ topButtonHeader:{
     marginVertical: '2%',
     borderRadius: 40
   },
-
 })
 
 export default Profile
