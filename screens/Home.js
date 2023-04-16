@@ -47,20 +47,21 @@ function HomeScreen({navigation,route}) {
         </View>
         
         {/* Top horizontal scrollbar */}
-        <View style={styles.scrollBar}>
-          <ScrollView horizontal={true}>
-            <TouchableOpacity>
-              <Image source={require('../assets/farmer.png')} style={styles.scrollBarPictures}/>
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <Image source={require('../assets/farmer.png')} style={styles.scrollBarPictures}/>
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <Image source={require('../assets/farmer.png')} style={styles.scrollBarPictures}/>
-            </TouchableOpacity>
-          </ScrollView>
+        <View style={styles.sideScrollFrame}>
+          <View style={styles.scrollBar}>
+            <ScrollView horizontal={true}>
+              <TouchableOpacity>
+                <Image source={require('../assets/cow.png')} style={styles.scrollBarPictures}/>
+              </TouchableOpacity>
+              <TouchableOpacity>
+                <Image source={require('../assets/greenonions.jpeg')} style={styles.scrollBarPictures}/>
+              </TouchableOpacity>
+              <TouchableOpacity>
+                <Image source={require('../assets/salad.jpeg')} style={styles.scrollBarPictures}/>
+              </TouchableOpacity>
+            </ScrollView>
+          </View>
         </View>
-
         {/* Bottom verticle scrollbar header area*/}
         <View style={styles.local}>
           <View style={styles.subLocal}>
@@ -78,16 +79,16 @@ function HomeScreen({navigation,route}) {
           <View style={styles.localScroll}>
             <ScrollView>
               <TouchableOpacity onPress={Market} style={styles.scrollBarItems}>
-                <Image source={require('../assets/farmer.png')} style={styles.scrollBarPictures}/>
-                <Text style={styles.scrollBarText}>Marketplace 1</Text>
+              <Image source={require('../assets/oldman.jpeg')} style={styles.scrollBarPictures}/>
+                <Text style={styles.scrollBarText}>Old Greg's Market</Text>
               </TouchableOpacity>
               <TouchableOpacity onPress={Market} style={styles.scrollBarItems}>
-                <Image source={require('../assets/farmer.png')} style={styles.scrollBarPictures}/>
-                <Text style={styles.scrollBarText}>Marketplace 2</Text>
+                <Image source={require('../assets/Vanilla3.jpg')} style={styles.scrollBarPictures}/>
+                <Text style={styles.scrollBarText}>Ice Farms</Text>
               </TouchableOpacity>
               <TouchableOpacity onPress={Market} style={styles.scrollBarItems}>
-                <Image source={require('../assets/farmer.png')} style={styles.scrollBarPictures}/>
-                <Text style={styles.scrollBarText}>Marketplace 3</Text>
+                <Image source={require('../assets/backyard.jpg')} style={styles.scrollBarPictures}/>
+                <Text style={styles.scrollBarText}>The Backyard Garden</Text>
               </TouchableOpacity>
             </ScrollView>
           </View>
@@ -128,7 +129,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     height: '12%',
-    width: '85%',
+    width: '90%',
     //marginVertical: '2%',
     marginTop: "10%",
     borderRadius: 20
@@ -157,7 +158,7 @@ const styles = StyleSheet.create({
     height: '100%',
     width: '50%',
     marginTop: "10%",
-    marginLeft: "10%"
+    marginLeft: "10%",
   },
   subB: {
     alignItems: 'flex-end',
@@ -181,28 +182,42 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     height: '6.5%',
-    width: '85%',
+    width: '90%',
     marginVertical: '2%',
     borderRadius: 100
+  },
+  sideScrollFrame: {
+    backgroundColor: '#ffffe0',
+    height: '20%',
+    width: '90%',
+    marginHorizontal: '2%',
+    fadingEdgeLength: "1%",
+    marginVertical: '2%',
+    borderRadius: 20
   },
   // Horizontal-Scroll
   scrollBar: {
     backgroundColor: '#ffffe0',
-    height: '20%',
-    width: '85%',
+    height: '90%',
+    width: '95%',
+    marginHorizontal: '2%',
+    fadingEdgeLength: "1%",
     marginVertical: '2%',
-    borderRadius: 20
+    borderRadius: 20,
+    //flex:.5
   },
-  
   scrollBarPictures: {
     height: 150,
     width: 150,
     marginLeft: 5,
     marginTop: 5,
+    marginRight: 5,
+    borderRadius: 20
   },
   scrollBarText: {
-    marginLeft: "15%",
-    marginTop: "15%"
+    marginLeft: "5%",
+    marginTop: "15%",
+    //backgroundColor: "#FFFFFF",
   },
   scrollBarItems: {
     backgroundColor: "#D3D3D3",
@@ -219,7 +234,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     //alignItems: 'center',
     height: '40%',
-    width: '85%',
+    width: '90%',
     //marginVertical: '2%',
     borderRadius: 20
   },
@@ -247,7 +262,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     alignItems: 'center',
     height: '8%',
-    width: '85%',
+    width: '90%',
     //marginVertical: '1%',
     marginTop: 5,
     borderRadius: 100

@@ -7,6 +7,7 @@ import {
     TextInput,
     Button,
     TouchableOpacity,
+    Modal,
 } from 'react-native';
 
 const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
@@ -17,12 +18,15 @@ export default ({navigation}) => {
     const [name, setName] = React.useState('');
     const [password, setPassword] = React.useState('');
     const [confirmPassword, setConfirmPassword] = React.useState('');
+
+    const [accountCreated, setAccountCreated] = React.useState(false);
     
     const backToOpen = () => {
         navigation.navigate('Open')
     }
 
     const create = () => {
+
         //console.log("Creating Profile...")
         if(validate()){
             //http request to server
@@ -35,12 +39,27 @@ export default ({navigation}) => {
             }
             
             console.log("data: ", data)
-            const saveUser = async() => {
-                await axios.post("http://10.15.5.56:19000", data);
-                console.log("Signup Successful!")
-            }   
+
+            
+            const url = "https://4eab-64-22-249-253.ngrok-free.app/createUser"
+
+            fetch(url, {
+                method: "post",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify(data)
+            }).then((res) => res.json())
+            .then(res => {
+                if (res.status === 200){
+                    setAccountCreated(true)
+                }
+                else{
+                    console.log("database error")
+                }
+            })
+            .catch(err => {
+                console.log(err)
+            })
         }
-        //console.log("Failed to validate")
     }
 
     const validate = () => {
@@ -53,11 +72,11 @@ export default ({navigation}) => {
         <View style={styles.container}>
             <Image source={require('../assets/slicedfruit.png')} style={styles.fruit}/>
             <Image source={require('../assets/italianveggies.png')} style={styles.veggies}/>
-            <Image source={require('../assets/cheese.png')} style={styles.cheese}/>
             <View style={styles.titleContainer}>
-                <Text style={styles.title}>DigiFarm</Text>
-                <Text style={styles.title}>Marketplace</Text>
+                <Image source={require('../assets/logo.png')} style={styles.logo}/>
             </View>
+
+            
             <View style={styles.inputView}>
                 <TextInput
                     style={styles.input}
@@ -96,8 +115,9 @@ export default ({navigation}) => {
                     onChangeText={(e) =>{
                         setConfirmPassword(e);
                     }}
-                />    
-            </View>
+                />   
+             </View>    
+    
             <TouchableOpacity style={styles.createButton} onPress={create} disabled={!email || !name || !password || !confirmPassword}>
                 <Text style={styles.createText}>Create</Text>
             </TouchableOpacity>
@@ -105,6 +125,19 @@ export default ({navigation}) => {
                 <Text style={styles.createText}>Back</Text>
             </TouchableOpacity>
 
+            <View>
+                <Modal
+                animationType="slide"
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={handleClose}
+                >
+                <View style={styles.centeredView}>
+                    <View style={styles.modalView}>                    
+                    </View>
+                </View>
+                </Modal>
+            </View>
         </View>
     )
 }
@@ -119,14 +152,20 @@ const styles = StyleSheet.create({
     },
     inputView: {
         borderBottomColor: "#7b5536",
+        //backgroundColor: "#7b5536",
         borderBottomWidth: 1,
-        margin: 10,
-        padding: 5,
+        margin:0,
+        padding: 10,
         width: '50%',
     },
     input: {
         color: "#7b5536",
-        textAlign: 'center'
+        textAlign: 'center',
+        marginTop:"5%",
+        fontWeight:"500",
+        padding:1,
+        fontSize:18, 
+        marginTop: "1%"
     },
     title: {
         color: "#7b5536",
@@ -138,7 +177,8 @@ const styles = StyleSheet.create({
     titleContainer: {
         marginBottom: 70,
         borderBottomColor: "#7b5536",
-        borderBottomWidth: 1
+        borderBottomWidth: 1,
+        marginTop:"10%",
     },
     createButton: {
         backgroundColor: '#B9DDA5',
@@ -161,10 +201,12 @@ const styles = StyleSheet.create({
         position: 'absolute',
         transform: [{scaleY: 1/4}, {scaleX: -1/4}],
         top: -220,
-        left: -520
+        left: -520,
+        opacity:0.75
     },
     veggies: {
         position: 'absolute',
+        opacity:0.75,
         transform: [{scaleY: 2/3}, {scaleX: 2/3}],
         top: 360,
         left: 160
@@ -174,5 +216,59 @@ const styles = StyleSheet.create({
         transform:[{scaleY: 1/2}, {scaleX:1/2}],
         top: -170,
         left: 120
-    }
+    },
+
+    modal:{
+        position: 'absolute'
+    },
+
+    centeredView: {
+        position: 'absolute',
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 22,
+      },
+      modalView: {
+        margin: 20,
+        backgroundColor: 'white',
+        borderRadius: 20,
+        padding: 35,
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: {
+          width: 0,
+          height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+      },
+      button: {
+        borderRadius: 20,
+        padding: 10,
+        elevation: 2,
+      },
+      buttonOpen: {
+        backgroundColor: '#F194FF',
+      },
+      buttonClose: {
+        backgroundColor: '#2196F3',
+      },
+      textStyle: {
+        color: 'white',
+        fontWeight: 'bold',
+        textAlign: 'center',
+      },
+      modalText: {
+        marginBottom: 15,
+        textAlign: 'center',
+      },
+      logo: {
+        position: 'absolute',
+        transform: [{scaleY: 1/4}, {scaleX: 1/4}],
+        top: -700,
+        left: -665,
+        marginBottom:"10%"
+    },
 })

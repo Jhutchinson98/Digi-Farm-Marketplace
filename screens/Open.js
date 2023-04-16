@@ -25,7 +25,8 @@ function Open({navigation,route}){
   return (
       <View style={styles.container}>
         <ImageBackground source={require('../assets/veggiebasket.png')} resizeMode="cover" style={styles.image} imageStyle={{opacity:0.80}}>
-          <Text style={styles.marketPlace}>DigiFarm Marketplace</Text>
+          <Image source={require('../assets/logo.png')} style={styles.logo}/>
+          {/* <Text style={styles.marketPlace}>DigiFarm Marketplace</Text> */}
           <TouchableOpacity style={styles.loginBtn} onPress={login}>
             <Text style={styles.loginText}>Login</Text>
           </TouchableOpacity> 
@@ -71,7 +72,7 @@ const styles = StyleSheet.create({
     height: 50,
     alignItems: "center",
     justifyContent: "center",
-    marginTop: "80%",
+    marginTop: "110%",
     marginLeft: "10%",
     backgroundColor: "#FCC88E",
   },
@@ -103,6 +104,12 @@ const styles = StyleSheet.create({
     //marginLeft:"32.5%",
     //backgroundColor: "#B9DDA5",
   },
+  logo: {
+    position: 'absolute',
+    transform: [{scaleY: 1/4}, {scaleX: 1/4}],
+    top: -500,
+    left: -458
+},
 });
 
 

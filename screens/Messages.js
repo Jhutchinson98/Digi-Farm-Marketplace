@@ -1,3 +1,4 @@
+import { TextInput } from '@react-native-material/core';
 import React, {useState} from 'react';
 import { Alert, Modal, StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
 
@@ -10,6 +11,8 @@ function Messages({navigation, route}) {
 
   return (
     <View style={styles.container}>
+
+
       <View style={styles.header}>
         <View style={styles.subA}>
           <TouchableOpacity onPress={Market}>
@@ -19,23 +22,30 @@ function Messages({navigation, route}) {
           </TouchableOpacity>
         </View>
         <View style={styles.subB}>
-        <Image
-              source={require('../assets/farmer.png')} 
-              style={styles.farmer}/>
+          <Image source={require('../assets/farmer.png')} style={styles.farmer}/>
         </View>
       </View>
+      
+      {/* Message History */}
       <View style={styles.chat}>
         <View style={styles.receive}>
-          <Text>Messages</Text>
+          <Text style={styles.font}>Hello! Did you still have the Churned Yogurt for sale?</Text>
         </View>
         <View style={styles.send}>
-          <Text>Messages</Text>
+          <Text style={styles.font}>Yes I did! When would you like to meet up?</Text>
         </View>
       </View>
-      <View style={styles.text}>
-        <View style={styles.other}></View>
-        <View style={styles.type}></View>
+
+      {/* Enter Message */}
+      <View style={styles.inputView}>
+        <TextInput 
+        style={styles.input}
+        placeholder='Begin Typing...'
+        multiline={true}
+        />
+        
       </View>
+
     </View>
   )
 }
@@ -56,6 +66,7 @@ const styles = StyleSheet.create({
     height: '10%',
     width: '85%',
     marginVertical: '2%'
+    ,borderRadius: 40
   },
   subA: {
     justifyContent: 'center',
@@ -73,7 +84,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'flex-end',
     height: '100%',
-    width: '50%'
+    width: '50%',
+    marginRight: 15
   },
   chat: {
     display: 'flex',
@@ -81,31 +93,37 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffe0',
     height: '70%',
     width: '85%',
-    marginVertical: '2%'
+    marginVertical: '2%',
+    borderRadius: 20
   },
   receive: {
-    justifyContent: 'flex-end',
-    alignItems: 'flex-start',
-    height: '97%',
-    width: '47%',
-    marginLeft: '3%',
-    marginBotton: '3%'
+    justifyContent: 'flex-start',
+    alignItems: "center",
+    height: '22%',
+    width: '40%',
+    marginLeft: '5%',
+    marginTop: "5%",
+    backgroundColor: "#58AE54",
+    borderRadius: 20
   },
   send: {
-    justifyContent: 'flex-end',
+    justifyContent: 'flex-start',
     alignItems: 'flex-end',
-    height: '97%',
-    width: '47%',
-    marginRight: '3%',
-    marginBotton: '3%'
+    height: '18%',
+    width: '35%',
+    marginLeft: '10%',
+    marginTop: "30%",
+    backgroundColor: "#468C43",
+    borderRadius: 20
   },
   text: {
     display: 'flex',
     flexDirection: 'row',
     backgroundColor: '#ffffe0',
-    height: '10%',
+    height: '6%',
     width: '85%',
-    marginVertical: '2%'
+    marginVertical: '2%',
+    borderRadius: 20
   },
   backButton: {
     borderRadius: 100,
@@ -113,14 +131,37 @@ const styles = StyleSheet.create({
     width: 60,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#FCC88E"
+    backgroundColor: "#FCC88E",
+    marginLeft: 15
   },
   other: {
     width: '25%',
   },
   type: {
     width: '75%',
-  }
+  },
+  inputView: {
+    margin: 10,
+    padding: 5,
+    width: '85%',
+},
+input: {
+    color: "#7b5536",
+    textAlign: 'center',
+},
+inputContainer: {
+    flex: 1,
+    color: "#7b5536",
+    backgroundColor: "rgba(255, 222, 144, 0.3)",
+    alignItems: "center",
+    justifyContent: "center",
+},
+font: {
+  fontSize:18,
+  color: "white",
+  margin: 10
+}
+
 })
 
 export default Messages

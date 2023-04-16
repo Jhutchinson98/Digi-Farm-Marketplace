@@ -6,7 +6,7 @@ const MarketItem = props => {
     <TouchableOpacity style={styles.container}>
         <View style={styles.top}>
             <View style={styles.picFrame}>
-                <Image source={require('../assets/icon.png')} style={styles.pic}/>
+                <Image source={require('../assets/cauliflower.png')} style={styles.pic}/>
             </View>
             <View>
                 <Text>Pieces: &infin;</Text>

@@ -8,11 +8,11 @@ const ProfileCard = props => {
             <Text style={styles.nameText}>{props.user} Marketplace</Text>
             <View style={styles.ratings}>
                 <Text style={styles.ratingText}>Rating:</Text>
-                <Image source={require('../assets/icon.png')} style={styles.star}/>
-                <Image source={require('../assets/icon.png')} style={styles.star}/>
-                <Image source={require('../assets/icon.png')} style={styles.star}/>
-                <Image source={require('../assets/icon.png')} style={styles.star}/>
-                <Image source={require('../assets/icon.png')} style={styles.star}/>
+                <Image source={require('../assets/filledstar.png')} style={styles.star}/>
+                <Image source={require('../assets/filledstar.png')} style={styles.star}/>
+                <Image source={require('../assets/filledstar.png')} style={styles.star}/>
+                <Image source={require('../assets/filledstar.png')} style={styles.star}/>
+                <Image source={require('../assets/emptystar.png')} style={styles.star}/>
             </View>
         </View>
         <TouchableOpacity style={styles.profilePic}>

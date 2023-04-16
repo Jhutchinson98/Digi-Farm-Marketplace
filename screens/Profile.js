@@ -46,18 +46,6 @@ function Profile({navigation,route}) {
   const [acceptCounter, setAcceptCounter] = React.useState(false);
   const [confirmPassword, setConfirmPassword] = React.useState('');
 
-  const items = [
-     {name: "item1", content: <Image source={require('../assets/farmer.png')}/>},
-     {name: "item2", content: <Image source={require('../assets/farmer.png')}/>},
-     {name: "item3", content: <Image source={require('../assets/farmer.png')}/>},
-     {name: "item4", content: <Image source={require('../assets/farmer.png')}/>},
-     {name: "item5", content: <Image source={require('../assets/farmer.png')}/>},
-     {name: "item6", content: <Image source={require('../assets/farmer.png')}/>},
-     {name: "item7", content: <Image source={require('../assets/farmer.png')}/>},
-     {name: "item8", content: <Image source={require('../assets/farmer.png')}/>},
-    
-  ]
-
   return (
     <View style={styles.container}>
       
@@ -77,9 +65,9 @@ function Profile({navigation,route}) {
         </View>
 
         <View style={styles.header2}>
-        <View >
-        <Image style={styles.marketImage} source={require('../assets/cheese.png')}/>
-        </View>
+          <View >
+            <Image style={styles.marketImage} source={require('../assets/cheese.png')}/>
+          </View>
           <View style={styles.subB}>
             <Text style={styles.market}>Your Marketplace</Text>
             <Text style={styles.rating}>Current Rating: 3.5 stars</Text>
@@ -102,7 +90,7 @@ function Profile({navigation,route}) {
             style={{ width: 300, height: 300 }}
             />
          )}
-        <Button title="Choose Photo" onPress={this.handleChoosePhoto} />
+        {/*<Button style={{color:"#7b5536"}}title="Choose Photo" onPress={this.handleChoosePhoto} />*/}
       </View>
           <View style={styles.inputView}>
                 <TextInput
@@ -157,20 +145,38 @@ function Profile({navigation,route}) {
 
       <ScrollView style={styles.productList}>
         <TouchableOpacity style={styles.scrollBarItems} >
-          <Image source={require('../assets/farmer.png')} style={styles.scrollBarPictures} />
-          <Text style={styles.scrollBarText}>Item 1</Text>
+          <Image source={require('../assets/yogurt.png')} style={styles.scrollBarPictures} />
+          <View style={styles.scrollBarTextContainer}>
+          <Text style={styles.scrollBarText}>Churned Yogurt</Text>
+          <Text style={styles.scrollBarText}>Quantity: 10</Text>
+          <Text style={styles.scrollBarText}>Count: 1</Text>
+          </View>
         </TouchableOpacity>
         <TouchableOpacity style={styles.scrollBarItems} >
-          <Image source={require('../assets/farmer.png')} style={styles.scrollBarPictures} />
-          <Text style={styles.scrollBarText}>Item 2</Text>
+          <Image source={require('../assets/muffin.png')} style={styles.scrollBarPictures} />
+          <View style={styles.scrollBarTextContainer}>
+          <Text style={styles.scrollBarText}>Baked Muffins</Text>
+          <Text style={styles.scrollBarText}>Quantity: 4</Text>
+          <Text style={styles.scrollBarText}>Count: 2</Text>
+          </View>
         </TouchableOpacity>
         <TouchableOpacity style={styles.scrollBarItems} >
-          <Image source={require('../assets/farmer.png')} style={styles.scrollBarPictures} />
-          <Text style={styles.scrollBarText}>Item 3</Text>
+          <Image source={require('../assets/milkHoney.jpg')} style={styles.scrollBarPictures} />
+          <View style={styles.scrollBarTextContainer}>
+          <Text style={styles.scrollBarText}>Fresh Cow Milk</Text>
+          <Text style={styles.scrollBarText}>Quantity: 6</Text>
+          <Text style={styles.scrollBarText}>Count: 1</Text>
+          </View>
         </TouchableOpacity>
         <TouchableOpacity style={styles.scrollBarItems} >
-          <Image source={require('../assets/farmer.png')} style={styles.scrollBarPictures} />
-          <Text style={styles.scrollBarText}>Item 4</Text>
+          <Image source={require('../assets/salad.jpeg')} style={styles.scrollBarPictures} />
+          <View style={styles.scrollBarTextContainer}>
+          <View style={styles.scrollBarTextContainer}>
+          <Text style={styles.scrollBarText}>Chopped Salad</Text>
+          <Text style={styles.scrollBarText}>Quantity: 12</Text>
+          <Text style={styles.scrollBarText}>Count: 2</Text>
+          </View>
+          </View>
         </TouchableOpacity>
       </ScrollView>
     
@@ -189,9 +195,52 @@ const styles = StyleSheet.create({
     width: 60,
     alignItems: "center",
     justifyContent: "center",
-    marginTop: "15%",
-    marginLeft: "5%",
+    //marginTop: "15%",
+    marginLeft: 15,
     backgroundColor: "#FCC88E"
+  },
+  container:{
+    backgroundColor: "#B9DDA5"
+  },
+  backButton: {
+    borderRadius: 100,
+    height: 60,
+    width: 60,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#FCC88E",
+    marginLeft: 15
+  },
+  messageButton:{
+    borderRadius: 100,
+    borderColor: "#643F6E",
+    height: 55,
+    width: 55,
+    alignItems: "center",
+    justifyContent: "center",
+    //justifyContent: "flex-start",
+    marginTop: "-18%",
+    marginLeft: "80%",
+    marginBottom: "1%",
+    backgroundColor: "#FCC88E"
+
+  },
+  header: {
+    display: 'flex',
+    flexDirection: 'row',
+    backgroundColor: '#ffffe0',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '9%',
+    width: '85%',
+    marginVertical: '2%',
+    marginTop: '9%',
+    marginLeft: '7%',
+    borderRadius: 50
+  },
+  scrollBarTextContainer:{
+    justifyContent:"center",
+    alignItems:"center",
   },
   marketImage:{
     //justifyContent:'flex-start',
@@ -215,7 +264,7 @@ const styles = StyleSheet.create({
     height: '12%',
     width: '100%',
     //marginVertical: '2%',
-    marginTop: "10%",
+    marginTop: "5%",
     marginRight: "5%",
     borderRadius: 20
   },
@@ -247,7 +296,7 @@ const styles = StyleSheet.create({
     marginTop: 22,
   },
   add:{
-    fontSize:40,
+    fontSize:20,
     fontWeight: 300,
   },
   messageText:{
@@ -258,7 +307,7 @@ const styles = StyleSheet.create({
     width: "80%",
     justifyContent: 'center',
     alignItems: 'center',
-    height: "60%",
+    height: "40%",
     backgroundColor: 'white',
     borderRadius: 20,
     padding: 30,
@@ -273,72 +322,59 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   addButton:{
-    backgroundColor: "rgba(255, 222, 144, 0.7)",
+    backgroundColor: "#FCC88E",
     width: "50%",
-    borderRadius: 20,
+    borderRadius: 15,
     marginBottom: "5%",
     justifyContent: "center",
     alignItems: "center",
     marginLeft: "5%",
     marginTop:"5%",
+    padding: 10,
     marginRight: "5%"
   },
-  messageButton:{
-    borderRadius: 100,
-    borderColor: "#643F6E",
-    height: 60,
-    width: 60,
-    alignItems: "center",
-    justifyContent: "center",
-    //justifyContent: "flex-start",
-    marginTop: "-15%",
-    marginLeft: "80%",
-    marginBottom: "1%",
-    backgroundColor: "#643F6E"
-
-  },
+  
   productList: {
-    marginLeft: "7%",
-    marginRight: "7%",
+    marginLeft: "3%",
+    marginRight: "3%",
     marginBottom: "60%",
-    backgroundColor: "#D3D3D3",
-    borderRadius: 20,
-    height: "56%"
+    backgroundColor: "#EBE4F6",
+    borderRadius: 10,
+    borderWeight:3,
+    borderColor: "#FFFFF",
+    height: "56%",
+    padding:7
   },
-  header:{
-    backgroundColor: "#B9DDA5",
-    flexDirection: 'row',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '100%',
-  },
+
   marketItem:{
     margin: "10%",
     //width: "auto",
     //height: "100%"
     height: 150,
     width: 150,
-    marginLeft: 15,
+    marginLeft: 10,
     marginTop: 10,
-    backgroundColor: "#FCC88E",
+    //backgroundColor: "#FCC88E",
     borderRadius: 20,
+    
   },
   button: {
     borderRadius: 20,
     padding: 10,
     elevation: 2,
+    backgroundColor:'#F194FF'
   },
   buttonOpen: {
     backgroundColor: '#F194FF',
   },
   buttonClose: {
-    backgroundColor: '#2196F3',
+    backgroundColor: "#643F6E",
   },
   textStyle: {
     color: 'white',
     fontWeight: 'bold',
     textAlign: 'center',
+    backgroundColor: "#643F6E"
   },
   modalText: {
     marginBottom: 15,
@@ -348,28 +384,43 @@ const styles = StyleSheet.create({
     borderBottomColor: "#7b5536",
     borderBottomWidth: 1,
     margin: 10,
+    justifyContent: 'center',
+    alignContent: 'center',
     padding: 5,
     width: '105%',
 },
 scrollBarPictures: {
   height: 150,
   width: 150,
-  marginLeft: 15,
-  marginTop: 10,
+  marginLeft: 10,
+  //marginTop: 10,
 },
 scrollBarText: {
   marginLeft: "15%",
   marginTop: "15%"
 },
 scrollBarItems: {
-  backgroundColor: "#D3D3D3",
+  backgroundColor: "#B89AE8",
   borderRadius: 20,
   marginBottom: "5%",
   justifyContent: "flex-start",
   flexDirection: "row",
-  marginLeft: "5%",
-  marginRight: "5%",
+  marginLeft: "2%",
+  marginRight: "2%",
+  padding:10
+
 },
+topButtonHeader:{
+    display: 'flex',
+    flexDirection: 'row',
+    backgroundColor: '#ffffe0',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '10%',
+    width: '85%',
+    marginVertical: '2%',
+    borderRadius: 40
+  },
 
 })
 

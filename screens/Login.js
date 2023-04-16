@@ -21,8 +21,22 @@ function Login({navigation, route}) {
     const LogCall = () => {
         // If correct, reroutes user to Home. 
         // Otherwise, tells user that username or password is incorrct
+        const user = {
+          email,
+          password
+        }
+        fetch('https://4eab-64-22-249-253.ngrok-free.app/login', {
+          method: 'post',
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify(user)
+        })
+        .then(res => res.json())
+        .then(res => {
+          console.log(res.token)
+        })
+        .catch(e => console.log(e))
         if (true) {
-            navigation.navigate('Home')
+          navigation.navigate('Home')
         }
     }
 
@@ -36,10 +50,11 @@ function Login({navigation, route}) {
 
    return (
     <View style={styles.container}>
-             <View style={styles.titleContainer}>
-                <Text style={styles.title}>DigiFarm</Text>
-                <Text style={styles.title}>Marketplace</Text>
-            </View>
+      <View style={styles.titleContainer}>
+        <Image source={require('../assets/logo.png')} style={styles.logo}/>
+        {/* <Text style={styles.title}>DigiFarm</Text>
+        <Text style={styles.title}>Marketplace</Text> */}
+      </View>
       
       <StatusBar style="auto" />
       <View style={styles.inputView}>
@@ -87,15 +102,20 @@ const styles = StyleSheet.create({
     margin: 10,
     padding: 5,
     width: '50%',
+    marginTop: 15
   },
   input: {
     color: "#7b5536",
-    textAlign: 'center'
+    textAlign: 'center', 
+    marginTop:10
   },
   forgot_button: {
     height: 30,
     marginBottom: 30,
     marginTop: 30
+  },
+  loginText:{
+
   },
   title: {
     color: "#7b5536",
@@ -128,6 +148,13 @@ const styles = StyleSheet.create({
     marginTop: "10%",
     backgroundColor: "#FCC88E",
   },
+  logo: {
+    position: 'absolute',
+    transform: [{scaleY: 1/4}, {scaleX: 1/4}],
+    top: -700,
+    left: -665,
+    marginBottom:"3%"
+},
 });
 
 
